@@ -21,7 +21,6 @@ export default function PublicRoute({component: Component, title, menu, ...rest}
         <div className={classes.root}>
           <Navigation title={title} menu={menu}/>
           <main className={classes.content}>
-            <Toolbar/>
             <Component {...props}/>
           </main>
         </div>
