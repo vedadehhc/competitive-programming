@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { HashRouter, Route, Link } from "react-router-dom";
-import Navigation from './components/Navigation';
+import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import Home from './components/Home';
+import PublicRoute from './components/PublicRoute';
 
 class App extends Component {
   render() {
     const theme = createMuiTheme({
       palette: {
         primary: {
-          main: '#0442a5',
+          main: '#80deea',
         },
         secondary: {
-          main: '#ea6b04',
+          main: '#ffe082',
         },
       },
     });
     return (
       <ThemeProvider theme={theme}>
-        <HashRouter basename="/">
-          <Navigation/>
-          <div>
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-          </div>
-        </HashRouter>
+        <Router basename="/">
+          <Switch>
+            <PublicRoute exact path="/" title="Home" menu="/" component={Home} />
+            <PublicRoute exact path="/about" menu="/about" title ="About us" component={About} />
+            <PublicRoute exact path="/courses" menu="/courses" title ="Courses" component={About} />
+            <Route render={() => <Redirect to="/" />}/>
+          </Switch>
+        </Router>
       </ThemeProvider>
     );
   }
 }
 
-const Home = () => <div><h2>Home</h2></div>
-const About = () => <div><h2>About</h2></div>
+const About = () => <h2>About</h2>
 
 export default App;
