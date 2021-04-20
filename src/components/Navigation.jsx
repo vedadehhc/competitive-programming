@@ -65,12 +65,22 @@ const navLinks = [
 function Navigation(props) {
   const classes = useStyles();
 
+  const navScrollModes = {
+    DEFAULT: "linear",  // default is linear
+    NONE: "none",       // no scroll effect
+    ELEVATE: "elevate", // elevate without shrinking
+    LINEAR: "linear",   // smooth shrinking
+    STEP: "step",       // binary shrinking
+  };
+
   const maxNavHeight = props.maxNavHeight || 100;
   const minNavHeight = props.minNavHeight || 60;
   const navTransitionSpeed = props.navTransition || '0.4s';
   const navShrinkSpeed = props.navSpeed || 1;
-  const navShrinkMode = props.navShrinkMode || 'linear'; // 'linear', 'step', 'default' (none)
+  const navScrollMode = props.navScrollMode || navScrollModes.DEFAULT; // 'linear', 'step', 'elevate' (elevation without shrink), 'none'
   const logoRatio = props.logoRatio || .7;
+
+  const noGutter = props.noGutter || false;
 
   const [hovered, setHovered] = useState(false);
   const [navHeight, setNavHeight] = useState(maxNavHeight);
@@ -93,8 +103,17 @@ function Navigation(props) {
   
   function scrollFunction() {
     const scroll = document.body.scrollTop || document.documentElement.scrollTop;
-    switch(navShrinkMode) {
-      case 'linear':
+    switch(navScrollMode) {
+      case navScrollModes.NONE:
+        break;
+      case navScrollModes.ELEVATE:
+        if(scroll === 0) {
+          setNavElevation(0);
+        } else {
+          setNavElevation(4);
+        }
+        break;
+      case navScrollModes.LINEAR:
         setNavHeight(Math.max(maxNavHeight-navShrinkSpeed*scroll, minNavHeight));
         if(scroll === 0) {
           setNavElevation(0);
@@ -102,7 +121,7 @@ function Navigation(props) {
           setNavElevation(4);
         }
         break;
-      case 'step':
+      case navScrollModes.STEP:
         if (navShrinkSpeed*scroll > maxNavHeight-minNavHeight) {
           setNavHeight(minNavHeight);
           setNavElevation(4);
@@ -112,6 +131,7 @@ function Navigation(props) {
         }
         break;
       default:
+        break;
     }
   }
 
@@ -158,10 +178,12 @@ function Navigation(props) {
           ))}
         </Toolbar>
       </AppBar>
-      <Toolbar style={{
-        height: navHeight,
-        transition: navTransitionSpeed,
-      }}/>
+      {noGutter || 
+        <Toolbar style={{
+          height: navHeight,
+          transition: navTransitionSpeed,
+        }}/>
+      }
     </React.Fragment>
   );
 }

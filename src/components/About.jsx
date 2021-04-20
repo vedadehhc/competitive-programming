@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profileCard: {
     width: 500,
-    backgroundColor: '#fff',// theme.palette.secondary.light,
+    backgroundColor: '#fff', // theme.palette.secondary.light,
   },
   profileAvatar: {
     width: 120,

@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
-import ParallaxImage from './ParallaxImage';
 
 const useStyles = makeStyles((theme) => ({
   parallaxImage: {
@@ -8,17 +7,20 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+    opacity: .8,
+    height: '100%',
   },
 }));
 
-export default function Home(props) {
+export default function ParallaxImage(props) {
   const classes = useStyles();
+
 
   return (
     <React.Fragment>
-      <ParallaxImage>
-
-      </ParallaxImage>
+      <div className={classes.parallaxImage} style={{backgroundImage: `url("${process.env.PUBLIC_URL}/images/img_parallax.jpg")`}}>
+        Hello world!
+      </div>
     </React.Fragment>
   );
 }

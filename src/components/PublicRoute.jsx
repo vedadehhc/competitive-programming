@@ -4,13 +4,24 @@ import Navigation from './Navigation';
 import { Route } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    height: '100%',
+  },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(1),
+    height: '100%',
   },
 }));
 
-export default function PublicRoute({component: Component, title, menu, backgroundColor, ...rest}) {
+export default function PublicRoute({
+  component: Component, 
+  title, 
+  menu, 
+  backgroundColor, 
+  pagePadding, 
+  navProps, 
+  ...rest
+}) {
   const classes = useStyles();
 
   return (
@@ -18,8 +29,8 @@ export default function PublicRoute({component: Component, title, menu, backgrou
       {...rest}
       render={props =>
         <div className={classes.root}>
-          <Navigation title={title} menu={menu}/>
-          <main className={classes.content} style={{backgroundColor: backgroundColor || '#fff'}}>
+          <Navigation title={title} menu={menu} {...navProps}/>
+          <main className={classes.content} style={{backgroundColor: (backgroundColor || '#fff'), padding: (pagePadding || '8px')}}>
             <Component {...props}/>
           </main>
         </div>

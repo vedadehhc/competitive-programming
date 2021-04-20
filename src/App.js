@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom"
 import Home from './components/Home';
 import About from './components/About';
 import PublicRoute from './components/PublicRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 class App extends Component {
   render() {
@@ -20,10 +21,31 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <Router basename="/">
+          <ScrollToTop/>
           <Switch>
-            <PublicRoute exact path="/" title="Home" menu="/" component={Home}/>
-            <PublicRoute exact path="/about" menu="/about" title ="About us" component={About} backgroundColor={theme.palette.secondary.main}/>
-            <PublicRoute exact path="/courses" menu="/courses" title ="Courses" component={About} />
+            <PublicRoute exact 
+              path="/" 
+              title="Home" 
+              menu="/" 
+              component={Home}
+              navProps={{noGutter: false}}
+              pagePadding="0px"
+              // backgroundColor="#333"
+            />
+            <PublicRoute exact 
+              path="/about"
+              menu="/about" 
+              title="About us" 
+              component={About} 
+              backgroundColor={theme.palette.secondary.main} 
+              //navProps={{navScrollMode: "linear"}}
+            />
+            <PublicRoute exact 
+              path="/courses" 
+              menu="/courses" 
+              title="Courses" 
+              component={About} 
+            />
             <Route render={() => <Redirect to="/" />}/>
           </Switch>
         </Router>
