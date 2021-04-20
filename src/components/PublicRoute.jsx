@@ -1,7 +1,6 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core';
 import Navigation from './Navigation';
-import Toolbar from '@material-ui/core/Toolbar';
 import { Route } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({

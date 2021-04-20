@@ -8,7 +8,6 @@ import Button from "@material-ui/core/Button";
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
-import ClassIcon from '@material-ui/icons/Class';
 
 import {makeStyles} from "@material-ui/core/styles";
 

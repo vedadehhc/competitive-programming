@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Home from './components/Home';
+import About from './components/About';
 import PublicRoute from './components/PublicRoute';
 
 class App extends Component {
@@ -30,7 +31,5 @@ class App extends Component {
     );
   }
 }
-
-const About = () => <h2>About</h2>
 
 export default App;
