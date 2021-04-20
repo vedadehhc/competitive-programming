@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PublicRoute({component: Component, title, menu, ...rest}) {
+export default function PublicRoute({component: Component, title, menu, backgroundColor, ...rest}) {
   const classes = useStyles();
 
   return (
@@ -19,7 +19,7 @@ export default function PublicRoute({component: Component, title, menu, ...rest}
       render={props =>
         <div className={classes.root}>
           <Navigation title={title} menu={menu}/>
-          <main className={classes.content}>
+          <main className={classes.content} style={{backgroundColor: backgroundColor || '#fff'}}>
             <Component {...props}/>
           </main>
         </div>
