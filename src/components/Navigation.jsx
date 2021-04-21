@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
   },
   logoDiv: {
-    width: 380,
+    maxWidth: 380,
     textAlign: 'left',
+    flexShrink: 1,
   },
   logoButton: {
     padding: theme.spacing(0),
@@ -27,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 1, 0, 0),
     color: theme.palette.secondary.main,
     float: 'left',
+    minWidth: 0,
+    minHeight: 0,
   },
   title: {
     margin: theme.spacing(1, 0, 1),
@@ -62,6 +65,9 @@ const navLinks = [
   ['Courses', '/courses', <LinearScaleIcon/>],
 ];
 
+export const defaultMinHeight = 60;
+export const defaultMaxHeight = 100;
+
 function Navigation(props) {
   const classes = useStyles();
 
@@ -73,8 +79,8 @@ function Navigation(props) {
     STEP: "step",       // binary shrinking
   };
 
-  const maxNavHeight = props.maxNavHeight || 100;
-  const minNavHeight = props.minNavHeight || 60;
+  const maxNavHeight = props.maxNavHeight || defaultMaxHeight;
+  const minNavHeight = props.minNavHeight || defaultMinHeight;
   const navTransitionSpeed = props.navTransition || '0.4s';
   const navShrinkSpeed = props.navSpeed || 1;
   const navScrollMode = props.navScrollMode || navScrollModes.DEFAULT; // 'linear', 'step', 'elevate' (elevation without shrink), 'none'
@@ -153,7 +159,7 @@ function Navigation(props) {
           <div>
             <Button component={RouterLink} to="/" className={classes.logoButton}>
               <img src="http://usaco.org/current/images/usaco_logo.png" alt="logo" className={classes.logo} style={{
-                height: logoRatio*navHeight,
+                maxHeight: logoRatio*navHeight,
                 transition: navTransitionSpeed,
               }}/>
               <Typography variant="h6" className={classes.title}>
@@ -169,13 +175,15 @@ function Navigation(props) {
               {props.title || ""}
             </Typography>
           </div>
-          {navLinks.map((text,index) => (
-            <Button component={RouterLink} to={text[1]} 
-              className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
-              onMouseEnter={handleHovering}
-              onMouseLeave={handleUnhovering}
-            >{text[0]}</Button>
-          ))}
+          <div>
+            {navLinks.map((text,index) => (
+              <Button component={RouterLink} to={text[1]} 
+                className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
+                onMouseEnter={handleHovering}
+                onMouseLeave={handleUnhovering}
+              >{text[0]}</Button>
+            ))}
+          </div>
         </Toolbar>
       </AppBar>
       {noGutter || 

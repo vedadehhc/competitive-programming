@@ -31,7 +31,7 @@ export default function PublicRoute({
         <div className={classes.root}>
           <Navigation title={title} menu={menu} {...navProps}/>
           <main className={classes.content} style={{backgroundColor: (backgroundColor || '#fff'), padding: (pagePadding || '8px')}}>
-            <Component {...props}/>
+            <Component {...props} navProps={navProps}/>
           </main>
         </div>
       }

@@ -28,9 +28,9 @@ class App extends Component {
               title="Home" 
               menu="/" 
               component={Home}
-              navProps={{noGutter: false}}
+              navProps={{noGutter: true}}
               pagePadding="0px"
-              // backgroundColor="#333"
+              backgroundColor="#fff"
             />
             <PublicRoute exact 
               path="/about"

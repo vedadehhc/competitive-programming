@@ -7,20 +7,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    opacity: .8,
-    height: '100%',
+    opacity: 1,
+    filter: 'blur(0px)',
+    height: '500px',
   },
 }));
 
-export default function ParallaxImage(props) {
+export default function ParallaxImage({backgroundImage, style, content, ...rest}) {
   const classes = useStyles();
 
 
   return (
-    <React.Fragment>
-      <div className={classes.parallaxImage} style={{backgroundImage: `url("${process.env.PUBLIC_URL}/images/img_parallax.jpg")`}}>
-        Hello world!
-      </div>
-    </React.Fragment>
+    <div className={classes.parallaxImage} style={{backgroundImage: backgroundImage, ...style}} {...rest}>
+      {content}
+    </div>
   );
 }
