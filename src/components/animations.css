@@ -1,7 +1,7 @@
 .bouncingButton {
-  -webkit-animation: bounce .5s infinite alternate;
-  -moz-animation: bounce .5s infinite alternate;
-  animation: bounce .5s infinite alternate;
+  -webkit-animation: bounce .4s infinite alternate;
+  -moz-animation: bounce .4s infinite alternate;
+  animation: bounce .4s infinite alternate;
 }
 @-webkit-keyframes bounce {
     to { -webkit-transform: scale(1.2); }
@@ -11,4 +11,8 @@
 }
 @keyframes bounce {
     to { transform: scale(1.2); }
+}
+
+.smoothScroll {
+    scroll-behavior: smooth;
 }

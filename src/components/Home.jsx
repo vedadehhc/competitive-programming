@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import {Link as RouterLink} from "react-router-dom";
@@ -9,6 +9,11 @@ import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {defaultMinHeight} from './Navigation';
+import Divider from '@material-ui/core/Divider';
+
+import VizSensor from 'react-visibility-sensor'; // or use any other 3rd party plugin or define your own
+import Slide from '@material-ui/core/Slide';
+import Grow from '@material-ui/core/Grow';
 
 import './animations.css';
 
@@ -44,9 +49,18 @@ const useStyles = makeStyles((theme) => ({
   gridContainer: {
     margin: theme.spacing(2),
   },
-  header: {
-    textAlign: 'center',
-    margin: theme.spacing(1),
+  sectionGrid: {
+    // alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerLeft: {
+    textAlign: 'left',
+  },
+  headerRight: {
+    textAlign: 'right',
+  },
+  headerDivider: {
+    margin: theme.spacing(0, 3),
   },
 }));
 
@@ -56,7 +70,22 @@ export default function Home(props) {
   const navBarHeight = props.navProps.minNavHeight || defaultMinHeight;
 
   const sectionRef1 = useRef(null);
-  const scrollSectionRef1 = () => window.scrollTo(0, sectionRef1.current.offsetTop - navBarHeight);
+  const sectionRef2 = useRef(null);
+
+  const scrollSectionRef1 = () => window.scrollTo({
+    left: 0, 
+    top: sectionRef1.current.offsetTop - navBarHeight,
+    behavior: 'smooth',
+  });
+
+  const scrollSectionRef2 = () => window.scrollTo({
+    left: 0, 
+    top: sectionRef2.current.offsetTop - navBarHeight,
+    behavior: 'smooth',
+  });
+
+  const [section1Visible, setSection1Visible] = useState(false);
+  const [section2Visible, setSection2Visible] = useState(false);
 
   return (
     <React.Fragment>
@@ -74,6 +103,7 @@ export default function Home(props) {
               <Grid item xs={12}>
                 <Typography variant="h3" className={classes.title}>Competitive Programming <br/>by Dev Chheda</Typography>
               </Grid>
+{/*               
               <Grid item xs={2}/>
               <Grid item xs={4}>
                 <Button variant="contained" color="secondary" fullWidth component={RouterLink} to='/about'>
@@ -85,29 +115,148 @@ export default function Home(props) {
                   Courses
                 </Button>
               </Grid>
-              <Grid item xs={2}/>
+              <Grid item xs={2}/> */}
 
               <Grid item xs={5}/>
               <Grid item xs={2} className={classes.centerGrid}>
-                <div className='bouncingButton' onClick={scrollSectionRef1}>
-                  <IconButton aria-label="down" color='secondary' onClick={scrollSectionRef1}>
+                  <IconButton aria-label="down" className='bouncingButton' style={{color: 'white'}} onClick={scrollSectionRef1}>
                     <ExpandMoreIcon/>
                   </IconButton>
-                </div>
               </Grid>
               <Grid item xs={5}/>
             </Grid>
           </div>
         </div>
       </div>
-      <div ref={sectionRef1}/>
       <br/>
-      <div>
-        <Container>
-          <Typography className={classes.header} variant="h5">What is Competitive Programming?</Typography>
+      <div ref={sectionRef1}/>
+      <div style={{height: '50px'}}/>
+      <VizSensor partialVisibility onChange={(isVisible) => {
+        setSection1Visible(isVisible);
+      }}>
+        <Container maxWidth='lg'>
+          <Grid container className={classes.sectionGrid}>
+            <Grow in={section1Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section1Visible ? '100ms' : '0ms'}}>
+              <Grid item xs={5}>
+                <Typography className={classes.headerLeft} variant="h5">What is Competitive Programming?</Typography>
+                {/* <Divider className={classes.headerDivider}/> */}
+                <br/>
+                <p>
+                  Competitive programming is a mind sport in which competitors are given a number of tasks, which they
+                  attempt to solve by writing computer programs. Solving competitive programming tasks usually requires
+                  in-depth knowledge of alogrithms and data structures, and, more critically, strong mathematical and 
+                  logical reasoning skills. 
+                </p>
+                <p>
+                  Some of the largest competitive programming contests include the 
+                  International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
+                  Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
+                  programming contests, such as Codeforces, TopCoder, and CodeChef. 
+                </p>
+              </Grid>
+            </Grow>
+            <Grow in={section1Visible} timeout={{enter: 1200, exit: 200}} style={{transitionDelay: section1Visible ? '300ms' : '0ms'}}>
+              <Divider orientation="vertical" flexItem className={classes.headerDivider}/>
+            </Grow>
+            <Grow in={section1Visible} timeout={{enter: 1400, exit: 200}} style={{transitionDelay: section1Visible ? '500ms' : '0ms'}}>
+              <Grid item xs={5}>
+                <Typography className={classes.headerLeft} variant="h5">Why Competitive Programming?</Typography>
+                <br/>
+                <p>
+                  Competitive programming presents a number of benefits for students, amatuers, and experienced programmers alike:
+                </p>
+                <ul>
+                  <li>
+                    Builds and augments core problem-solving skills, with broad benefits even beyond programming
+                  </li>
+                  <li>
+                    Trains students in algorithmic thinking, a critical skill for aspiring programmers
+                  </li>
+                  <li>
+                    Helps students boost their profile when applying to colleges, and attaining research or corporate 
+                    internships
+                  </li>
+                  <li>
+                    Prepares job-seekers to ace technical coding interviews at software companies such as Google, Facebook, 
+                    and Amazon
+                  </li>
+                </ul>
+              </Grid>
+            </Grow>
+          </Grid>
+          <br/>
+          <div className={classes.centerGrid}>    
+            <IconButton className='bouncingButton' aria-label="down" style={{color: 'black'}} onClick={scrollSectionRef2}>
+              <ExpandMoreIcon/>
+            </IconButton>
+          </div>
         </Container>
-      </div>
-      <div style={{height: '1500px'}}></div>
+      </VizSensor>
+      <div style={{height: '100px'}}/>
+
+      <div ref={sectionRef2}/>
+      <div style={{height: '50px'}}/>
+      <VizSensor partialVisibility onChange={(isVisible) => {
+        setSection2Visible(isVisible);
+      }}>
+        <Container maxWidth='lg'>
+          <Grid container className={classes.sectionGrid}>
+            <Grow in={section2Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section2Visible ? '100ms' : '0ms'}}>
+              <Grid item xs={5}>
+                <Typography className={classes.headerLeft} variant="h5">What is Competitive Programming?</Typography>
+                {/* <Divider className={classes.headerDivider}/> */}
+                <br/>
+                <p>
+                  Competitive programming is a mind sport in which competitors are given a number of tasks, which they
+                  attempt to solve by writing computer programs. Solving competitive programming tasks usually requires
+                  in-depth knowledge of alogrithms and data structures, and, more critically, strong mathematical and 
+                  logical reasoning skills. 
+                </p>
+                <p>
+                  Some of the largest competitive programming contests include the 
+                  International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
+                  Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
+                  programming contests, such as Codeforces, TopCoder, and CodeChef. 
+                </p>
+              </Grid>
+            </Grow>
+            <Grow in={section2Visible} timeout={{enter: 1200, exit: 200}} style={{transitionDelay: section2Visible ? '300ms' : '0ms'}}>
+              <Divider orientation="vertical" flexItem className={classes.headerDivider}/>
+            </Grow>
+            <Grow in={section2Visible} timeout={{enter: 1400, exit: 200}} style={{transitionDelay: section2Visible ? '500ms' : '0ms'}}>
+              <Grid item xs={5}>
+                <Typography className={classes.headerLeft} variant="h5">Why Competitive Programming?</Typography>
+                <br/>
+                <p>
+                  Competitive programming presents a number of benefits for students, amatuers, and experienced programmers alike:
+                </p>
+                <ul>
+                  <li>
+                    Builds and augments core problem-solving skills, with broad benefits even beyond programming
+                  </li>
+                  <li>
+                    Trains students in algorithmic thinking, a critical skill for aspiring programmers
+                  </li>
+                  <li>
+                    Helps students boost their profile when applying to colleges, and attaining research or corporate 
+                    internships
+                  </li>
+                  <li>
+                    Prepares job-seekers to ace technical coding interviews at software companies such as Google, Facebook, 
+                    and Amazon
+                  </li>
+                </ul>
+              </Grid>
+            </Grow>
+          </Grid>
+          <br/>
+          <div className={classes.centerGrid}>    
+            <IconButton className='bouncingButton' aria-label="down" style={{color: 'black'}} onClick={scrollSectionRef1}>
+              <ExpandMoreIcon/>
+            </IconButton>
+          </div>
+        </Container>
+      </VizSensor>
     </React.Fragment>
   );
 }

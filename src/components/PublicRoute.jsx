@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Navigation from './Navigation';
 import { Route } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ export default function PublicRoute({
   ...rest
 }) {
   const classes = useStyles();
-
+  
   return (
     <Route
       {...rest}
