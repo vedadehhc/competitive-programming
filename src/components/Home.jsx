@@ -49,9 +49,21 @@ const useStyles = makeStyles((theme) => ({
   gridContainer: {
     margin: theme.spacing(2),
   },
+  sectionContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sectionGrid: {
     // alignItems: 'center',
     justifyContent: 'center',
+  },
+  break: {
+    flexBasis: '100%',
+    WebkitFlexBasis: '100%',
+    height: 0,
   },
   headerLeft: {
     textAlign: 'left',
@@ -68,6 +80,7 @@ export default function Home(props) {
   const classes = useStyles();
 
   const navBarHeight = props.navProps.minNavHeight || defaultMinHeight;
+  console.log(navBarHeight);
 
   const sectionRef1 = useRef(null);
   const sectionRef2 = useRef(null);
@@ -89,11 +102,11 @@ export default function Home(props) {
 
   return (
     <React.Fragment>
-      <div>
+      <div style={{height: '100%'}}>
         <ParallaxImage 
           backgroundImage={`url("${process.env.PUBLIC_URL}/images/coding-bgd-slow.gif")`} 
           style={{
-            height: '650px',
+            height: '100%',
           }}
         />
         
@@ -128,13 +141,11 @@ export default function Home(props) {
           </div>
         </div>
       </div>
-      <br/>
-      <div ref={sectionRef1}/>
-      <div style={{height: '50px'}}/>
+      <div style={{height: '10px'}}/>
       <VizSensor partialVisibility onChange={(isVisible) => {
         setSection1Visible(isVisible);
       }}>
-        <Container maxWidth='lg'>
+        <Container maxWidth='lg' className={classes.sectionContainer} ref={sectionRef1} style={{height: `calc(100% - ${navBarHeight}px)`}}>
           <Grid container className={classes.sectionGrid}>
             <Grow in={section1Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section1Visible ? '100ms' : '0ms'}}>
               <Grid item xs={5}>
@@ -184,7 +195,6 @@ export default function Home(props) {
               </Grid>
             </Grow>
           </Grid>
-          <br/>
           <div className={classes.centerGrid}>    
             <IconButton className='bouncingButton' aria-label="down" style={{color: 'black'}} onClick={scrollSectionRef2}>
               <ExpandMoreIcon/>
@@ -192,14 +202,12 @@ export default function Home(props) {
           </div>
         </Container>
       </VizSensor>
-      <div style={{height: '100px'}}/>
-
-      <div ref={sectionRef2}/>
-      <div style={{height: '50px'}}/>
+      <div style={{height: '10px'}}/>
+      <Divider variant='middle'/>
       <VizSensor partialVisibility onChange={(isVisible) => {
         setSection2Visible(isVisible);
       }}>
-        <Container maxWidth='lg'>
+        <Container maxWidth='lg' className={classes.sectionContainer} ref={sectionRef2}>
           <Grid container className={classes.sectionGrid}>
             <Grow in={section2Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section2Visible ? '100ms' : '0ms'}}>
               <Grid item xs={5}>
