@@ -15,6 +15,10 @@ import VizSensor from 'react-visibility-sensor'; // or use any other 3rd party p
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
 
+import Section from './Section';
+import TwoColumnSection from './TwoColumnSection';
+import TransitionGridItem from './TransitionGridItem';
+
 import './animations.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,11 +54,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   sectionContainer: {
-    display: 'flex',
+    // display: 'flex',
     flexWrap: 'wrap',
-    height: '100%',
+    // height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: theme.spacing(5,1,1),
   },
   sectionGrid: {
     // alignItems: 'center',
@@ -102,7 +107,7 @@ export default function Home(props) {
 
   return (
     <React.Fragment>
-      <div style={{height: '100%'}}>
+      <div style={{height: '100vh'}}>
         <ParallaxImage 
           backgroundImage={`url("${process.env.PUBLIC_URL}/images/coding-bgd-slow.gif")`} 
           style={{
@@ -114,7 +119,7 @@ export default function Home(props) {
           <div className={classes.titleContainer}>
             <Grid container direction="row" spacing={2} className={classes.gridContainer}>
               <Grid item xs={12}>
-                <Typography variant="h3" className={classes.title}>Competitive Programming <br/>by Dev Chheda</Typography>
+                <Typography variant="h3" className={classes.title}>Competitive Programming Institute<br/>by Dev Chheda</Typography>
               </Grid>
 {/*               
               <Grid item xs={2}/>
@@ -141,130 +146,94 @@ export default function Home(props) {
           </div>
         </div>
       </div>
-      <div style={{height: '10px'}}/>
-      <VizSensor partialVisibility onChange={(isVisible) => {
-        setSection1Visible(isVisible);
-      }}>
-        <Container maxWidth='lg' className={classes.sectionContainer} ref={sectionRef1} style={{height: `calc(100% - ${navBarHeight}px)`}}>
-          <Grid container className={classes.sectionGrid}>
-            <Grow in={section1Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section1Visible ? '100ms' : '0ms'}}>
-              <Grid item xs={5}>
-                <Typography className={classes.headerLeft} variant="h5">What is Competitive Programming?</Typography>
-                {/* <Divider className={classes.headerDivider}/> */}
-                <br/>
-                <p>
-                  Competitive programming is a mind sport in which competitors are given a number of tasks, which they
-                  attempt to solve by writing computer programs. Solving competitive programming tasks usually requires
-                  in-depth knowledge of alogrithms and data structures, and, more critically, strong mathematical and 
-                  logical reasoning skills. 
-                </p>
-                <p>
-                  Some of the largest competitive programming contests include the 
-                  International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
-                  Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
-                  programming contests, such as Codeforces, TopCoder, and CodeChef. 
-                </p>
-              </Grid>
-            </Grow>
-            <Grow in={section1Visible} timeout={{enter: 1200, exit: 200}} style={{transitionDelay: section1Visible ? '300ms' : '0ms'}}>
-              <Divider orientation="vertical" flexItem className={classes.headerDivider}/>
-            </Grow>
-            <Grow in={section1Visible} timeout={{enter: 1400, exit: 200}} style={{transitionDelay: section1Visible ? '500ms' : '0ms'}}>
-              <Grid item xs={5}>
-                <Typography className={classes.headerLeft} variant="h5">Why Competitive Programming?</Typography>
-                <br/>
-                <p>
-                  Competitive programming presents a number of benefits for students, amatuers, and experienced programmers alike:
-                </p>
-                <ul>
-                  <li>
-                    Builds and augments core problem-solving skills, with broad benefits even beyond programming
-                  </li>
-                  <li>
-                    Trains students in algorithmic thinking, a critical skill for aspiring programmers
-                  </li>
-                  <li>
-                    Helps students boost their profile when applying to colleges, and attaining research or corporate 
-                    internships
-                  </li>
-                  <li>
-                    Prepares job-seekers to ace technical coding interviews at software companies such as Google, Facebook, 
-                    and Amazon
-                  </li>
-                </ul>
-              </Grid>
-            </Grow>
-          </Grid>
-          <div className={classes.centerGrid}>    
-            <IconButton className='bouncingButton' aria-label="down" style={{color: 'black'}} onClick={scrollSectionRef2}>
-              <ExpandMoreIcon/>
-            </IconButton>
-          </div>
-        </Container>
-      </VizSensor>
-      <div style={{height: '10px'}}/>
+
+      <div style={{height: '1px'}}/>
+      
+      <TwoColumnSection 
+        onVisChange={(isVisible) => setSection1Visible(isVisible)} 
+        ref={sectionRef1}
+        maxWidth='lg'
+        downButton
+        onClickDown={scrollSectionRef2}
+        className={classes.sectionContainer}
+        transition={React.Fragment}
+        isVisible={section1Visible}
+        divider
+        column1={
+          <React.Fragment>
+            <Typography className={classes.headerLeft} variant="h5">What is Competitive Programming?</Typography>
+            {/* <Divider className={classes.headerDivider}/> */}
+            <br/>
+            <p>
+              Competitive programming is a mind sport in which competitors are given a number of tasks, which they
+              attempt to solve by writing computer programs. Solving competitive programming tasks usually requires
+              in-depth knowledge of alogrithms and data structures, and, more critically, strong mathematical and 
+              logical reasoning skills. 
+            </p>
+            <p>
+              Some of the largest competitive programming contests include the 
+              International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
+              Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
+              programming contests, such as Codeforces, TopCoder, and CodeChef. 
+            </p>
+          </React.Fragment>
+        }
+        column2={
+          <React.Fragment>
+            <Typography className={classes.headerLeft} variant="h5">Why Competitive Programming?</Typography>
+            <br/>
+            <p>
+              Competitive programming presents a number of benefits for students, amatuers, and experienced programmers alike:
+            </p>
+            <ul>
+              <li>
+                Builds and augments core problem-solving skills, with broad benefits even beyond programming
+              </li>
+              <li>
+                Trains students in algorithmic thinking, a critical skill for aspiring programmers
+              </li>
+              <li>
+                Helps students boost their profile when applying to colleges, and attaining research or corporate 
+                internships
+              </li>
+              <li>
+                Prepares job-seekers to ace technical coding interviews at software companies such as Google, Facebook, 
+                and Amazon
+              </li>
+            </ul>
+          </React.Fragment>
+        }
+      />
+
       <Divider variant='middle'/>
-      <VizSensor partialVisibility onChange={(isVisible) => {
-        setSection2Visible(isVisible);
-      }}>
-        <Container maxWidth='lg' className={classes.sectionContainer} ref={sectionRef2}>
-          <Grid container className={classes.sectionGrid}>
-            <Grow in={section2Visible} timeout={{enter: 1000, exit: 200}} style={{transitionDelay: section2Visible ? '100ms' : '0ms'}}>
-              <Grid item xs={5}>
-                <Typography className={classes.headerLeft} variant="h5">What is Competitive Programming?</Typography>
-                {/* <Divider className={classes.headerDivider}/> */}
-                <br/>
-                <p>
-                  Competitive programming is a mind sport in which competitors are given a number of tasks, which they
-                  attempt to solve by writing computer programs. Solving competitive programming tasks usually requires
-                  in-depth knowledge of alogrithms and data structures, and, more critically, strong mathematical and 
-                  logical reasoning skills. 
-                </p>
-                <p>
-                  Some of the largest competitive programming contests include the 
-                  International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
-                  Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
-                  programming contests, such as Codeforces, TopCoder, and CodeChef. 
-                </p>
-              </Grid>
-            </Grow>
-            <Grow in={section2Visible} timeout={{enter: 1200, exit: 200}} style={{transitionDelay: section2Visible ? '300ms' : '0ms'}}>
-              <Divider orientation="vertical" flexItem className={classes.headerDivider}/>
-            </Grow>
-            <Grow in={section2Visible} timeout={{enter: 1400, exit: 200}} style={{transitionDelay: section2Visible ? '500ms' : '0ms'}}>
-              <Grid item xs={5}>
-                <Typography className={classes.headerLeft} variant="h5">Why Competitive Programming?</Typography>
-                <br/>
-                <p>
-                  Competitive programming presents a number of benefits for students, amatuers, and experienced programmers alike:
-                </p>
-                <ul>
-                  <li>
-                    Builds and augments core problem-solving skills, with broad benefits even beyond programming
-                  </li>
-                  <li>
-                    Trains students in algorithmic thinking, a critical skill for aspiring programmers
-                  </li>
-                  <li>
-                    Helps students boost their profile when applying to colleges, and attaining research or corporate 
-                    internships
-                  </li>
-                  <li>
-                    Prepares job-seekers to ace technical coding interviews at software companies such as Google, Facebook, 
-                    and Amazon
-                  </li>
-                </ul>
-              </Grid>
-            </Grow>
-          </Grid>
+      <div style={{height: '10px'}}/>
+
+      <TwoColumnSection 
+        onVisChange={(isVisible) => setSection2Visible(isVisible)} 
+        ref={sectionRef2}
+        maxWidth='lg'
+        className={classes.sectionContainer}
+        transition={Grow}
+        isVisible={section2Visible}
+        column1={
+          <React.Fragment>
+
+          <Typography variant="h5" style={{textAlign: 'left'}}>Course Offerings</Typography>
           <br/>
-          <div className={classes.centerGrid}>    
-            <IconButton className='bouncingButton' aria-label="down" style={{color: 'black'}} onClick={scrollSectionRef1}>
-              <ExpandMoreIcon/>
-            </IconButton>
+            <p>
+              We offer anumber of courses focused on competitive programming
+            </p>
+          <div className={classes.centerGrid}>
+
+            <Button variant='contained' color='secondary'>Sign up</Button>
           </div>
-        </Container>
-      </VizSensor>
+          </React.Fragment>
+        }
+      >
+
+      </TwoColumnSection>
+
+      <div style={{height:1000}}/>
     </React.Fragment>
   );
 }

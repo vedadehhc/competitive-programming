@@ -65,6 +65,10 @@ const navLinks = [
   ['Courses', '/courses', <LinearScaleIcon/>],
 ];
 
+const extraLinks = [
+  ['Email', 'mailto:devmchheda@gmail.com'],
+];
+
 export const defaultMinHeight = 60;
 export const defaultMaxHeight = 100;
 
@@ -163,7 +167,7 @@ function Navigation(props) {
                 transition: navTransitionSpeed,
               }}/>
               <Typography variant="h6" className={classes.title}>
-                Competitive Programming by Dev
+                Competitive Programming Institute
               </Typography>
             </Button>
           </div>
@@ -177,7 +181,14 @@ function Navigation(props) {
           </div>
           <div>
             {navLinks.map((text,index) => (
-              <Button component={RouterLink} to={text[1]} 
+              <Button component={RouterLink} to={text[1]}
+                className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
+                onMouseEnter={handleHovering}
+                onMouseLeave={handleUnhovering}
+              >{text[0]}</Button>
+            ))}
+            {extraLinks.map((text,index) => (
+              <Button href={text[1]}
                 className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
                 onMouseEnter={handleHovering}
                 onMouseLeave={handleUnhovering}
@@ -187,7 +198,7 @@ function Navigation(props) {
         </Toolbar>
       </AppBar>
       {noGutter || 
-        <Toolbar style={{
+        <div style={{
           height: navHeight,
           transition: navTransitionSpeed,
         }}/>

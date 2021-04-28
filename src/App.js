@@ -5,6 +5,7 @@ import Home from './components/Home';
 import About from './components/About';
 import PublicRoute from './components/PublicRoute';
 import ScrollToTop from './components/ScrollToTopOff';
+import Courses from './components/Courses';
 
 class App extends Component {
   render() {
@@ -44,7 +45,8 @@ class App extends Component {
               path="/courses" 
               menu="/courses" 
               title="Courses" 
-              component={About} 
+              component={Courses} 
+              backgroundColor={theme.palette.secondary.main} 
             />
             <Route render={() => <Redirect to="/" />}/>
           </Switch>
