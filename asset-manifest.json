@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/competitive-programming/static/css/main.cd02d819.chunk.css",
-    "main.js": "/competitive-programming/static/js/main.aa787b94.chunk.js",
-    "main.js.map": "/competitive-programming/static/js/main.aa787b94.chunk.js.map",
+    "main.js": "/competitive-programming/static/js/main.674ec3e4.chunk.js",
+    "main.js.map": "/competitive-programming/static/js/main.674ec3e4.chunk.js.map",
     "runtime-main.js": "/competitive-programming/static/js/runtime-main.a4e3a885.js",
     "runtime-main.js.map": "/competitive-programming/static/js/runtime-main.a4e3a885.js.map",
     "static/js/2.eeb179db.chunk.js": "/competitive-programming/static/js/2.eeb179db.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.a4e3a885.js",
     "static/js/2.eeb179db.chunk.js",
     "static/css/main.cd02d819.chunk.css",
-    "static/js/main.aa787b94.chunk.js"
+    "static/js/main.674ec3e4.chunk.js"
   ]
 }
