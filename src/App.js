@@ -7,12 +7,15 @@ import PublicRoute from './components/PublicRoute';
 import ScrollToTop from './components/ScrollToTopOff';
 import Courses from './components/Courses';
 
+export const mobileThreshold = 750;
+
 class App extends Component {
+  
   render() {
     const theme = createMuiTheme({
       palette: {
         primary: {
-          main: '#80deea',
+          main: 'rgb(50,100,200)',
         },
         secondary: {
           main: '#ffe082',

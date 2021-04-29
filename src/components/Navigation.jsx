@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from '@material-ui/core/Typography';
 import {Link as RouterLink} from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import IconButton from '@material-ui/core/IconButton';
 
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
+import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@material-ui/icons/Facebook';
 
 import {makeStyles} from "@material-ui/core/styles";
+import {mobileThreshold} from './../App';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -35,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0, 1),
     textTransform: "none",
     textAlign: "left",
+    color: 'white',
   },
   titleDiv: {
     flexGrow: 1,
@@ -44,8 +49,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   navButton: {
-    color: '#000',
+    color: '#fff',
     '&:hover':{
+      color: '#000',
       backgroundColor: '#fff',
     }
   },
@@ -62,11 +68,12 @@ const useStyles = makeStyles((theme) => ({
 const navLinks = [
   ['Home', '/', <HomeIcon/>], 
   ['About', '/about', <InfoIcon/>],
-  ['Courses', '/courses', <LinearScaleIcon/>],
+  // ['Courses', '/courses', <LinearScaleIcon/>],
 ];
 
 const extraLinks = [
-  ['Email', 'mailto:devmchheda@gmail.com'],
+  [<EmailIcon/>, 'mailto:devmchheda@gmail.com'],
+  [<FacebookIcon/>, 'https://www.facebook.com/competitive.programming.dev']
 ];
 
 export const defaultMinHeight = 60;
@@ -74,6 +81,24 @@ export const defaultMaxHeight = 100;
 
 function Navigation(props) {
   const classes = useStyles();
+
+  const [windowDimension, setWindowDimension] = useState(null);
+
+  useEffect(() => {
+    setWindowDimension(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowDimension <= mobileThreshold;
+
 
   const navScrollModes = {
     DEFAULT: "linear",  // default is linear
@@ -83,11 +108,11 @@ function Navigation(props) {
     STEP: "step",       // binary shrinking
   };
 
-  const maxNavHeight = props.maxNavHeight || defaultMaxHeight;
   const minNavHeight = props.minNavHeight || defaultMinHeight;
+  const maxNavHeight = isMobile ? minNavHeight : (props.maxNavHeight || defaultMaxHeight);
   const navTransitionSpeed = props.navTransition || '0.4s';
   const navShrinkSpeed = props.navSpeed || 1;
-  const navScrollMode = props.navScrollMode || navScrollModes.DEFAULT; // 'linear', 'step', 'elevate' (elevation without shrink), 'none'
+  const navScrollMode = props.navScrollMode || navScrollModes.DEFAULT; 
   const logoRatio = props.logoRatio || .7;
 
   const noGutter = props.noGutter || false;
@@ -106,7 +131,7 @@ function Navigation(props) {
 
   function linearInterp() {
     if (minNavHeight === maxNavHeight) {
-      return 1;
+      return 0;
     }
     return (navHeight - minNavHeight)/(maxNavHeight - minNavHeight);
   }
@@ -149,7 +174,6 @@ function Navigation(props) {
     scrollFunction()
   }
 
-
   return (
     <React.Fragment>
       <AppBar position="fixed" elevation={navElevation} style={{
@@ -162,12 +186,12 @@ function Navigation(props) {
         }}>
           <div>
             <Button component={RouterLink} to="/" className={classes.logoButton}>
-              <img src="http://usaco.org/current/images/usaco_logo.png" alt="logo" className={classes.logo} style={{
+              {/* <img src="http://usaco.org/current/images/usaco_logo.png" alt="logo" className={classes.logo} style={{
                 maxHeight: logoRatio*navHeight,
                 transition: navTransitionSpeed,
-              }}/>
+              }}/> */}
               <Typography variant="h6" className={classes.title}>
-                Competitive Programming Institute
+                {isMobile ? "CPI" : "Competitive Programming Institute"}
               </Typography>
             </Button>
           </div>
@@ -176,7 +200,7 @@ function Navigation(props) {
               fontSize: (1.5+1*linearInterp())+'rem',
               transition: navTransitionSpeed,
             }}>
-              {props.title || ""}
+              { /* props.title || "" */ }
             </Typography>
           </div>
           <div>
@@ -188,11 +212,13 @@ function Navigation(props) {
               >{text[0]}</Button>
             ))}
             {extraLinks.map((text,index) => (
-              <Button href={text[1]}
+              <IconButton href={text[1]}
                 className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
                 onMouseEnter={handleHovering}
                 onMouseLeave={handleUnhovering}
-              >{text[0]}</Button>
+                target="_blank" 
+                rel="noopener noreferrer"
+              >{text[0]}</IconButton>
             ))}
           </div>
         </Toolbar>

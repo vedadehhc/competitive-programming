@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 10),
   },
   actionButton: {
-    margin: theme.spacing(0, 2),
+    margin: theme.spacing(0, 2, 1),
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -84,7 +84,6 @@ export default function Courses(props) {
                     </div>
                     <CardContent>
                       {course.description}
-                      
                     </CardContent>
                     <CardActions>
                       <div style={{width: '100%', display:'flex', justifyContent: 'flex-end'}}>

@@ -29,6 +29,7 @@ export default function PublicRoute({
   const navBarHeight = (navProps && navProps.minNavHeight) || defaultMinHeight;
   const botBarHeight = (botProps && botProps.botHeight) || defaultHeight;
 
+
   return (
     <Route
       {...rest}

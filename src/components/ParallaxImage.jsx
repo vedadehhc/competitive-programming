@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ParallaxImage({backgroundImage, style, content, ...rest}) {
+export default function ParallaxImage({backgroundImage, style, children, ...rest}) {
   const classes = useStyles();
 
 
   return (
     <div className={classes.parallaxImage} style={{backgroundImage: backgroundImage, ...style}} {...rest}>
-      {content}
+      {children}
     </div>
   );
 }

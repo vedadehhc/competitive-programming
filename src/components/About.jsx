@@ -48,7 +48,7 @@ export default function About(props) {
         <Card className={classes.profileCard}>
           <CardContent>
             <div className={classes.avatarDiv}>
-              <Avatar className={classes.profileAvatar} src={`${process.env.PUBLIC_URL}/images/Chheda_Dev.JPG`}/>
+              <Avatar className={classes.profileAvatar} src={`${process.env.PUBLIC_URL}/images/MIT_profile.jpg`}/>
             </div>
             <br/>
             <Typography variant="h4" className={classes.nameText}>Dev Chheda</Typography>

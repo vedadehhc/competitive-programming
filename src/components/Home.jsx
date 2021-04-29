@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import {Link as RouterLink} from "react-router-dom";
@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {defaultMinHeight} from './Navigation';
 import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
 
 import VizSensor from 'react-visibility-sensor'; // or use any other 3rd party plugin or define your own
 import Slide from '@material-ui/core/Slide';
@@ -18,6 +19,7 @@ import Grow from '@material-ui/core/Grow';
 import Section from './Section';
 import TwoColumnSection from './TwoColumnSection';
 import TransitionGridItem from './TransitionGridItem';
+import {mobileThreshold} from './../App';
 
 import './animations.css';
 
@@ -30,14 +32,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -45%)',
     zIndex: 2,
   },
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgb(100,100,100,.7)',
+    backgroundColor: 'rgb(50,100,200,.85)',
     maxWidth: '800px',
   },
   title: {
@@ -84,6 +86,23 @@ const useStyles = makeStyles((theme) => ({
 export default function Home(props) {
   const classes = useStyles();
 
+  const [windowDimension, setWindowDimension] = useState(null);
+
+  useEffect(() => {
+    setWindowDimension(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowDimension <= mobileThreshold;
+
   const navBarHeight = props.navProps.minNavHeight || defaultMinHeight;
   console.log(navBarHeight);
 
@@ -105,6 +124,16 @@ export default function Home(props) {
   const [section1Visible, setSection1Visible] = useState(false);
   const [section2Visible, setSection2Visible] = useState(false);
 
+  const [welcomeEmail, setWelcomeEmail] = useState('');
+
+  function handleWelcomeEmailChange(event) {
+    setWelcomeEmail(event.target.value);
+  }
+
+  function handleEmailSubmit(event) {
+    event.preventDefault();
+  }
+
   return (
     <React.Fragment>
       <div style={{height: '100vh'}}>
@@ -119,7 +148,7 @@ export default function Home(props) {
           <div className={classes.titleContainer}>
             <Grid container direction="row" spacing={2} className={classes.gridContainer}>
               <Grid item xs={12}>
-                <Typography variant="h3" className={classes.title}>Competitive Programming Institute<br/>by Dev Chheda</Typography>
+                <Typography variant="h3" className={classes.title}>Competitive Programming Institute</Typography>
               </Grid>
 {/*               
               <Grid item xs={2}/>
@@ -135,9 +164,33 @@ export default function Home(props) {
               </Grid>
               <Grid item xs={2}/> */}
 
+              <Grid item xs={12} style={{display:'flex', justifyContent: 'center'}}>
+                <Typography variant='h5' style={{color:'#f55', textAlign:'center'}}>
+                  Sign up for our newsletter to receive updates about new competitive programming courses, 
+                  special discounts, and free resources.
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} style={{display:'flex', marginTop:15, marginBottom:15}}>
+                
+                <form style={{width: '100%', display:'flex', alignItems:'center'}} onSubmit={handleEmailSubmit}>
+                  <input 
+                    autocomplete='email'
+                    type='email'
+                    required
+                    autofocus 
+                    placeholder='Email Address' 
+                    style={{width: '75%', height:'100%', marginRight: '5%'}}
+                    value={welcomeEmail}
+                    onChange={handleWelcomeEmailChange}
+                  />
+                  <Button component='button' type='submit' variant='contained' color='secondary' style={{width: '20%', height:'100%'}}>Sign up</Button>
+                </form>
+              </Grid>
+
               <Grid item xs={5}/>
               <Grid item xs={2} className={classes.centerGrid}>
-                  <IconButton aria-label="down" className='bouncingButton' style={{color: 'white'}} onClick={scrollSectionRef1}>
+                  <IconButton aria-label="down" className='bouncingButton' style={{color: 'white'}} onClick={scrollSectionRef2}>
                     <ExpandMoreIcon/>
                   </IconButton>
               </Grid>
@@ -148,12 +201,77 @@ export default function Home(props) {
       </div>
 
       <div style={{height: '1px'}}/>
+
+      
+
+      <Section 
+        onVisChange={(isVisible) => setSection2Visible(isVisible)} 
+        ref={sectionRef2}
+        maxWidth='md'
+        className={classes.sectionContainer}
+        transition={React.Fragment}
+        isVisible={section2Visible}
+      >
+        <div style={{display:'flex', justifyContent:'center'}}>
+          <Typography variant="h5" style={{textAlign: 'center'}}>Competitive Programming Summer Day Camp (USACO Bronze/Silver)</Typography>
+        </div>
+        <br/>
+        <p>
+          This course aims to prepare motivated students for competing in the USACO Bronze and Silver division contests. Experience in competitive programming helps students with applying to colleges, attaining research and corporate internships, and acing technical coding interviews.
+        </p>
+        <p>
+          This course trains students in algorithmic thinking, and helps develop core problem-solving skills. Topics covered include computational complexity, brute force algorithms, sorting, searching, array manipulation, greedy algorithms, and introductory graph theory. 
+        </p>
+
+        <br/>
+
+        <Grid container spacing={1} style={{paddingLeft:20,paddingRight:20}}>
+          <Grid item xs={12} md={4}>
+            <Button 
+              href='mailto:devmchheda@gmail.com'
+              variant='contained' 
+              color='secondary'
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{width:'100%'}}
+            >Email us</Button>
+          </Grid>
+          
+          <Grid item xs={12} md={4} >
+            <Button 
+              href='https://drive.google.com/file/d/1rlHeCPZFgJ6_uZTJAdxynitVod2vfCE0/view'
+              variant='contained' 
+              color='secondary'
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{width:'100%'}}
+            >Course flyer</Button>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Button 
+              href='https://forms.gle/Ko9kgdVCKHHnf9s6A'
+              variant='contained' 
+              color='secondary'
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{width:'100%'}}
+            >Register</Button>
+          </Grid>
+        </Grid>
+
+        <div className={classes.centerGrid}>
+          <div style={{width: '10%'}}></div>
+          <div style={{width: '10%'}}></div>
+        </div>
+      </Section>
+
+      <div style={{height: '50px'}}/>     
       
       <TwoColumnSection 
         onVisChange={(isVisible) => setSection1Visible(isVisible)} 
         ref={sectionRef1}
         maxWidth='lg'
-        downButton
         onClickDown={scrollSectionRef2}
         className={classes.sectionContainer}
         transition={React.Fragment}
@@ -205,35 +323,7 @@ export default function Home(props) {
         }
       />
 
-      <Divider variant='middle'/>
-      <div style={{height: '10px'}}/>
-
-      <TwoColumnSection 
-        onVisChange={(isVisible) => setSection2Visible(isVisible)} 
-        ref={sectionRef2}
-        maxWidth='lg'
-        className={classes.sectionContainer}
-        transition={Grow}
-        isVisible={section2Visible}
-        column1={
-          <React.Fragment>
-
-          <Typography variant="h5" style={{textAlign: 'left'}}>Course Offerings</Typography>
-          <br/>
-            <p>
-              We offer anumber of courses focused on competitive programming
-            </p>
-          <div className={classes.centerGrid}>
-
-            <Button variant='contained' color='secondary'>Sign up</Button>
-          </div>
-          </React.Fragment>
-        }
-      >
-
-      </TwoColumnSection>
-
-      <div style={{height:1000}}/>
+      <div style={{height:100}}/>
     </React.Fragment>
   );
 }
