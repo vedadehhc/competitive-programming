@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
+import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import FacebookIcon from '@material-ui/icons/Facebook';
 
@@ -73,6 +74,7 @@ const navLinks = [
 
 const extraLinks = [
   [<EmailIcon/>, 'mailto:devmchheda@gmail.com'],
+  [<CallIcon/>, 'tel:704-981-1789'],
   [<FacebookIcon/>, 'https://www.facebook.com/competitive.programming.dev']
 ];
 
