@@ -35,7 +35,7 @@ class ExitIntentModal extends React.Component {
 
   componentDidMount() {
     this.removeExitIntent = ExitIntent({
-      threshold: 10,
+      threshold: 20,
       maxDisplays: 1,
       eventThrottle: 100,
       onExitIntent: () => {
