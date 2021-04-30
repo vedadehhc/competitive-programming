@@ -4,7 +4,7 @@ import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom"
 import Home from './components/Home';
 import About from './components/About';
 import PublicRoute from './components/PublicRoute';
-import ScrollToTop from './components/ScrollToTopOff';
+import ScrollToTop from './components/util/ScrollToTopOff';
 import Courses from './components/Courses';
 
 export const mobileThreshold = 750;
@@ -19,6 +19,7 @@ class App extends Component {
         },
         secondary: {
           main: '#ffe082',
+          // main: '#f55',
         },
       },
     });

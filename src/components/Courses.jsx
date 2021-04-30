@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Carousel from 'react-material-ui-carousel';
 import Button from '@material-ui/core/Button';
-import Section from "./Section";
+import Section from "./util/Section";
 import { makeStyles } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 

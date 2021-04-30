@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import TransitionGridItem from './TransitionGridItem';
 import Divider from '@material-ui/core/Divider';
 
-import {mobileThreshold} from './../App';
+import {mobileThreshold} from '../../App';
 
 const useStyles = makeStyles((theme) => ({
   sectionGrid: {

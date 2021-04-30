@@ -1,12 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from '@material-ui/core/Typography';
 import {Link as RouterLink} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core';
-import TwoColumnSection from './TwoColumnSection';
-import { Divider } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 
@@ -17,6 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import EmailIcon from '@material-ui/icons/Email';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import { saveEmailAddress } from './backend/saveEmails';
 
 const useStyles = makeStyles((theme) => ({
   bottomBar: {
@@ -89,8 +86,9 @@ export default function BottomBar(props) {
     setBotEmail(event.target.value);
   }
 
-  async function handleEmailSubmit(event) {
+  function handleEmailSubmit(event) {
     event.preventDefault();
+    saveEmailAddress(botEmail);
   }
 
   return (

@@ -82,7 +82,7 @@ export const defaultMaxHeight = 100;
 function Navigation(props) {
   const classes = useStyles();
 
-  const [windowDimension, setWindowDimension] = useState(null);
+  const [windowDimension, setWindowDimension] = useState(window.innerWidth);
 
   useEffect(() => {
     setWindowDimension(window.innerWidth);
@@ -98,6 +98,7 @@ function Navigation(props) {
   }, []);
 
   const isMobile = windowDimension <= mobileThreshold;
+  // console.log(isMobile);
 
 
   const navScrollModes = {

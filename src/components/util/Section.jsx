@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 import VizSensor from 'react-visibility-sensor'; // or use any other 3rd party plugin or define your own
-import './animations.css';
+import '../animations.css';
 
 const useStyles = makeStyles((theme) => ({
   centerGrid: {

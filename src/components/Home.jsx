@@ -1,25 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import {Link as RouterLink} from "react-router-dom";
 import { makeStyles } from '@material-ui/core';
-import ParallaxImage from './ParallaxImage';
+import ParallaxImage from './util/ParallaxImage';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {defaultMinHeight} from './Navigation';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
 
-import VizSensor from 'react-visibility-sensor'; // or use any other 3rd party plugin or define your own
-import Slide from '@material-ui/core/Slide';
-import Grow from '@material-ui/core/Grow';
-
-import Section from './Section';
-import TwoColumnSection from './TwoColumnSection';
-import TransitionGridItem from './TransitionGridItem';
+import Section from './util/Section';
+import TwoColumnSection from './util/TwoColumnSection';
 import {mobileThreshold} from './../App';
+import { saveEmailAddress } from './backend/saveEmails';
 
 import './animations.css';
 
@@ -104,7 +96,7 @@ export default function Home(props) {
   const isMobile = windowDimension <= mobileThreshold;
 
   const navBarHeight = props.navProps.minNavHeight || defaultMinHeight;
-  console.log(navBarHeight);
+  // console.log(navBarHeight);
 
   const sectionRef1 = useRef(null);
   const sectionRef2 = useRef(null);
@@ -132,6 +124,7 @@ export default function Home(props) {
 
   function handleEmailSubmit(event) {
     event.preventDefault();
+    saveEmailAddress(welcomeEmail);
   }
 
   return (
