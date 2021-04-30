@@ -1,29 +1,25 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { credentials } from './credentials'; // private credentials file
+export async function saveEmailAddress(emailAddress) {
+  const data = JSON.stringify({
+    id: emailAddress, 
+    email: emailAddress,
+  });
 
-const client = new DynamoDBClient({ 
-  region: "us-east-2",
-  credentials: credentials,
-});
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data,
+  }
 
-export async function saveEmailAddress(email) {
-  const putParams = {
-    TableName: 'cpi-mailing-list',
-    Item: {
-      'UserId': {'S': email}, 
-      'Email': {'S': email},
-    }
-  };
-  const command = new PutItemCommand(putParams);
   try {
-    const data = await client.send(command);
-    console.log('Success');
-    console.log(data);
+    const res = await fetch('https://9yzau83wvg.execute-api.us-east-2.amazonaws.com/items', options);
 
+    console.log(res);
     return true;
-  } catch (error) {
-    console.log(error);
-
+  } catch(err) {
+    console.log(err);
     return false;
   }
+
 }

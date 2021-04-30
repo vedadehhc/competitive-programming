@@ -265,7 +265,7 @@ export default function Home(props) {
         </div>
         <br/>
         <p>
-          This course aims to prepare motivated students for competing in the USACO Bronze and Silver division contests. Experience in competitive programming helps students with applying to colleges, attaining research and corporate internships, and acing technical coding interviews.
+          This course aims to prepare motivated students for competing in the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USACO</a> Bronze and Silver division contests. Experience in competitive programming helps students with applying to colleges, attaining research and corporate internships, and acing technical coding interviews.
         </p>
         <p>
           This course trains students in algorithmic thinking, and helps develop core problem-solving skills. Topics covered include computational complexity, brute force algorithms, sorting, searching, array manipulation, greedy algorithms, and introductory graph theory. 
@@ -338,7 +338,7 @@ export default function Home(props) {
             </p>
             <p>
               Some of the largest competitive programming contests include the 
-              International Olympiad in Informatics (IOI), the USA Computing Olympiad (USACO), and the International
+              <a href="https://ioinformatics.org/" target="_blank" rel="noopener noreferrer">International Olympiad in Informatics (IOI)</a>, the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USA Computing Olympiad (USACO)</a>, and the International
               Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
               programming contests, such as Codeforces, TopCoder, and CodeChef. 
             </p>
