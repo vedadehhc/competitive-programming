@@ -6,6 +6,11 @@ import ParallaxImage from './util/ParallaxImage';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
 import {defaultMinHeight} from './Navigation';
 
 import Section from './util/Section';
@@ -117,18 +122,50 @@ export default function Home(props) {
   const [section2Visible, setSection2Visible] = useState(false);
 
   const [welcomeEmail, setWelcomeEmail] = useState('');
+  const [welcomeEmailStatus, setWelcomeEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+
+  const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setWelcomeEmailStatus(0);
+  }
 
   function handleWelcomeEmailChange(event) {
     setWelcomeEmail(event.target.value);
   }
 
-  function handleEmailSubmit(event) {
+  async function handleEmailSubmit(event) {
     event.preventDefault();
-    saveEmailAddress(welcomeEmail);
+    setWelcomeEmailStatus(1);
+
+    const result = await saveEmailAddress(welcomeEmail);
+
+    if(result) {
+      setWelcomeEmailStatus(2);
+    } else {
+      setWelcomeEmailStatus(3);
+    }
   }
 
   return (
     <React.Fragment>
+
+      <Snackbar open={welcomeEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+        message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][welcomeEmailStatus - 2]}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+        ContentProps={{style: {backgroundColor: statusColors[welcomeEmailStatus]}}}
+      />
+
       <div style={{height: '100vh'}}>
         <ParallaxImage 
           backgroundImage={`url("${process.env.PUBLIC_URL}/images/coding-bgd-slow.gif")`} 
@@ -166,7 +203,7 @@ export default function Home(props) {
 
               <Grid item xs={12} style={{display:'flex', marginTop:15, marginBottom:15}}>
                 
-                <form style={{width: '100%', display:'flex', alignItems:'center'}} onSubmit={handleEmailSubmit}>
+                <form style={{width: '100%', display:'flex', alignItems:'center', maxHeight: 50}} onSubmit={handleEmailSubmit}>
                   <input 
                     autocomplete='email'
                     type='email'
@@ -177,7 +214,25 @@ export default function Home(props) {
                     value={welcomeEmail}
                     onChange={handleWelcomeEmailChange}
                   />
-                  <Button component='button' type='submit' variant='contained' color='secondary' style={{width: '20%', height:'100%'}}>Sign up</Button>
+                  <Button 
+                    component='button' 
+                    type='submit' 
+                    variant='contained' 
+                    color={'secondary'}
+                    style={{width: '20%', height:'100%', backgroundColor: statusColors[welcomeEmailStatus]}}
+                    disabled={welcomeEmailStatus === 1 || welcomeEmailStatus === 2}
+                  >
+                    {welcomeEmailStatus === 0 ? 
+                    "Sign up" 
+                    : welcomeEmailStatus === 1 ?
+                    <CircularProgress size={25}/>
+                    : welcomeEmailStatus === 2 ?
+                    <DoneIcon/>
+                    : welcomeEmailStatus === 3 ?
+                    <ErrorIcon/>
+                    : "Sign up"
+                    }
+                  </Button>
                 </form>
               </Grid>
 

@@ -5,6 +5,11 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
+import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import {mobileThreshold} from './../App';
 
@@ -81,18 +86,50 @@ export default function BottomBar(props) {
   const isMobile = windowDimension <= mobileThreshold;
 
   const [botEmail, setBotEmail] = useState('');
+  const [botEmailStatus, setBotEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  
+  const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setBotEmailStatus(0);
+  }
 
   function handleBotEmailChange(event) {
     setBotEmail(event.target.value);
   }
 
-  function handleEmailSubmit(event) {
+  async function handleEmailSubmit(event) {
     event.preventDefault();
-    saveEmailAddress(botEmail);
+    setBotEmailStatus(1);
+
+    const result = await saveEmailAddress(botEmail);
+
+    if(result) {
+      setBotEmailStatus(2);
+    } else {
+      setBotEmailStatus(3);
+    }
   }
 
   return (
     <div className={classes.bottomBar} style={{minHeight: props.botHeight || defaultHeight}}>
+
+      <Snackbar open={botEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+        message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][botEmailStatus - 2]}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+        ContentProps={{style: {backgroundColor: statusColors[botEmailStatus]}}}
+      />
+
       <div className={classes.leftDiv}>
         <Typography variant='h6' style={{color:'white', width:'100%'}}>
           Competitive Programming Institute
@@ -142,7 +179,25 @@ export default function BottomBar(props) {
               />
             </Grid>
             <Grid item xs={12} md={4}>
-              <Button component="button" type='submit' variant='contained' color='secondary' style={{width:'100%'}}>Sign up</Button>
+              <Button 
+                component="button" 
+                type='submit' 
+                variant='contained' 
+                color='secondary' 
+                style={{width:'100%', backgroundColor: statusColors[botEmailStatus]}}
+                disabled={botEmailStatus === 1 || botEmailStatus === 2}
+              >
+                {botEmailStatus === 0 ? 
+                "Sign up" 
+                : botEmailStatus === 1 ?
+                <CircularProgress size={25}/>
+                : botEmailStatus === 2 ?
+                <DoneIcon/>
+                : botEmailStatus === 3 ?
+                <ErrorIcon/>
+                : "Sign up"
+                }
+              </Button>
             </Grid>
           </Grid>
 

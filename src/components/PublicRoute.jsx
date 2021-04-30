@@ -8,6 +8,12 @@ import ExitIntentModal from './util/ExitIntentModal';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { saveEmailAddress } from './backend/saveEmails';
+import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,14 +41,33 @@ export default function PublicRoute({
   const botBarHeight = (botProps && botProps.botHeight) || defaultHeight;
 
   const [exitEmail, setExitEmail] = useState('');
+  const [exitEmailStatus, setExitEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  
+  const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setExitEmailStatus(0);
+  }
 
   function handleExitEmailChange(event) {
     setExitEmail(event.target.value);
   }
 
-  function handleEmailSubmit(event) {
+  async function handleEmailSubmit(event) {
     event.preventDefault();
-    saveEmailAddress(exitEmail);
+    setExitEmailStatus(1);
+
+    const result = await saveEmailAddress(exitEmail);
+
+    if(result) {
+      setExitEmailStatus(2);
+    } else {
+      setExitEmailStatus(3);
+    }
   }
 
   return (
@@ -50,6 +75,19 @@ export default function PublicRoute({
       {...rest}
       render={props =>
         <div className={classes.root}>
+
+          <Snackbar open={exitEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+            message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][exitEmailStatus - 2]}
+            action={
+              <React.Fragment>
+                <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+            ContentProps={{style: {backgroundColor: statusColors[exitEmailStatus]}}}
+          />
+
           <Navigation title={title} menu={menu} {...navProps}/>
           <main className={classes.content} style={{
             backgroundColor: (backgroundColor || '#fff'), 
@@ -60,6 +98,7 @@ export default function PublicRoute({
             <br/>
           </main>
           <BottomBar className={classes.bottomBar} {...botProps}/>
+
           <ExitIntentModal>
             <Typography variant='h4' style={{color:'black', textAlign: 'left'}}>Leaving so soon?</Typography>
             <Typography variant='h4' style={{color:'#f55', textAlign: 'left'}}>Sign up for our newsletter first.</Typography>
@@ -86,11 +125,30 @@ export default function PublicRoute({
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Button component="button" type='submit' variant='contained' color='secondary' style={{width:'100%'}}>Sign up</Button>
+                  <Button 
+                    component="button" 
+                    type='submit' 
+                    variant='contained' 
+                    color='secondary' 
+                    style={{width:'100%', backgroundColor: statusColors[exitEmailStatus]}}
+                    disabled={exitEmailStatus === 1 || exitEmailStatus === 2}
+                  >
+                    {exitEmailStatus === 0 ? 
+                    "Sign up" 
+                    : exitEmailStatus === 1 ?
+                    <CircularProgress size={25}/>
+                    : exitEmailStatus === 2 ?
+                    <DoneIcon/>
+                    : exitEmailStatus === 3 ?
+                    <ErrorIcon/>
+                    : "Sign up"
+                    }
+                  </Button>
                 </Grid>
               </Grid>
             </form>
           </ExitIntentModal>
+
         </div>
       }
     />

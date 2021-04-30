@@ -30,30 +30,43 @@ class ExitIntentModal extends React.Component {
       show: false,
     };
 
-    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
-    this.removeExitIntent = ExitIntent({
-      threshold: 20,
-      maxDisplays: 1,
-      eventThrottle: 100,
-      onExitIntent: () => {
-        this.setState({show: true});
-        document.body.style.overflow = 'hidden';
-        console.log('showing');
-      },
-    });
+    if (document.cookie.indexOf("modal_seen=true") < 0) {
+      this.removeExitIntent = ExitIntent({
+        threshold: 20,
+        maxDisplays: 1,
+        eventThrottle: 100,
+        onExitIntent: () => {
+          this.setState({show: true});
+          document.body.style.overflow = 'hidden';
+          // console.log('showing');
+        },
+      });
+    }
   }
 
   componentWillUnmount() {
-    this.removeExitIntent();
+    if(this.removeExitIntent){
+      this.removeExitIntent();
+    }
     document.body.style.overflow = 'unset';
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({show: false});
     document.body.style.overflow = 'unset';
+  }
+
+  componentDidUpdate() {
+    if(this.state.show) {
+      let expiryDate = new Date(
+        Date.now() + 1 * (1000 * 60 * 60 * 24) // days * (ms * s * min * hours)
+      );
+      // expiryDate.setFullYear(expiryDate.getFullYear() + 1)
+      document.cookie = "modal_seen=true; expires=" + expiryDate.toUTCString();
+    }
   }
 
   render() {
