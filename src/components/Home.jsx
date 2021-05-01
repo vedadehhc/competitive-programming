@@ -16,7 +16,7 @@ import {defaultMinHeight} from './Navigation';
 import Section from './util/Section';
 import TwoColumnSection from './util/TwoColumnSection';
 import {mobileThreshold} from './../App';
-import { saveEmailAddress } from './backend/saveEmails';
+import saveEmailAddress from './backend/saveEmails';
 
 import './animations.css';
 

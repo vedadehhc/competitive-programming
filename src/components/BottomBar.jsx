@@ -19,7 +19,7 @@ import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import { saveEmailAddress } from './backend/saveEmails';
+import saveEmailAddress from './backend/saveEmails';
 
 const useStyles = makeStyles((theme) => ({
   bottomBar: {
