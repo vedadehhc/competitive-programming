@@ -67,8 +67,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   navButtonMobile: {
-    color: '#000',
-    backgroundColor: '#fff',
+    color: '#fff',
     width: '100%',
   }
 }));
@@ -239,7 +238,7 @@ function Navigation(props) {
                   <MenuIcon/>
                 </IconButton>
                 <Drawer anchor='top' open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                  <div style={{height: '100vh'}}>
+                  <div style={{height: '100vh', backgroundColor: 'rgb(50,100,200)'}}>
                     <Button
                       onClick={() => setDrawerOpen(false)}
                       className={ classes.navButtonMobile }

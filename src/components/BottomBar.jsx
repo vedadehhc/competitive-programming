@@ -89,6 +89,7 @@ export default function BottomBar(props) {
 
   const [botEmail, setBotEmail] = useState('');
   const [botEmailStatus, setBotEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  const [botEmailMessage, setBotEmailMessage] = useState('');
   
   const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
 
@@ -110,7 +111,9 @@ export default function BottomBar(props) {
 
     const result = await saveEmailAddress(botEmail);
 
-    if(result) {
+    setBotEmailMessage(result.message);
+
+    if(result.success) {
       setBotEmailStatus(2);
     } else {
       setBotEmailStatus(3);
@@ -121,7 +124,7 @@ export default function BottomBar(props) {
     <div className={classes.bottomBar} style={{minHeight: props.botHeight || defaultHeight}}>
 
       <Snackbar open={botEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-        message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][botEmailStatus - 2]}
+        message={botEmailMessage}
         action={
           <React.Fragment>
             <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>

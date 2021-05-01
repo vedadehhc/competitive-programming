@@ -1,4 +1,4 @@
-import  { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import  { DynamoDB, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 import {CognitoIdentityClient} from '@aws-sdk/client-cognito-identity';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
@@ -26,18 +26,36 @@ async function saveEmailDynamo(emailAddress) {
   const TABLE_NAME = 'cpi-mailing-list';
   const TOPIC_ARN = 'arn:aws:sns:us-east-2:042242103208:cpi-mailing-list-updates';
 
-  const params = {
-    TableName: TABLE_NAME,
-    Item: {
-      'id': {S: emailAddress},
-      'email': {S : emailAddress},
-    },
-  };
+  try {
+    const getParams = {
+      TableName: TABLE_NAME,
+      Key: {
+        id: {'S': emailAddress},
+      },
+    }
+
+    const getData = await dynamoClient.send(new GetItemCommand(getParams));
+
+    console.log("Dynamo Get success", getData);
+    if(getData.Item) {
+      return {success: true, message: "You are already subscribed!"};
+    }
+  } catch (err) {
+    console.log("Dynamo Get error", err);
+  }
 
   try {
-    const data = await dynamoClient.send(new PutItemCommand(params));
+    const putParams = {
+      TableName: TABLE_NAME,
+      Item: {
+        'id': {S: emailAddress},
+        'email': {S : emailAddress},
+      },
+    };
 
-    console.log("Dynamo success:", data);
+    const data = await dynamoClient.send(new PutItemCommand(putParams));
+
+    console.log("Dynamo Put success:", data);
 
     try {
       const messageParams = {
@@ -47,16 +65,16 @@ async function saveEmailDynamo(emailAddress) {
       }
 
       const messageData = await snsClient.send(new PublishCommand(messageParams));
-      console.log("SNS Success:", messageData);
+      console.log("SNS success:", messageData);
 
     } catch (err) {
-      console.log(err);
+      console.log("SNS error", err);
     }
 
-    return true;
+    return {success: true, message: "Success! You are now on our mailing list."};
   } catch (err) {
-    console.log(err);
-    return false;
+    console.log("Dynamo Put error", err);
+    return {success: false, message: "There was an unexpected error. Please try again."};
   }
 }
 

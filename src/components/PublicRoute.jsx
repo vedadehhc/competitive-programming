@@ -62,6 +62,7 @@ export default function PublicRoute({
 
   const [exitEmail, setExitEmail] = useState('');
   const [exitEmailStatus, setExitEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  const [exitEmailMessage, setExitEmailMessage] = useState('');
   
   const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
 
@@ -83,7 +84,9 @@ export default function PublicRoute({
 
     const result = await saveEmailAddress(exitEmail);
 
-    if(result) {
+    setExitEmailMessage(result.message);
+
+    if(result.success) {
       setExitEmailStatus(2);
     } else {
       setExitEmailStatus(3);
@@ -97,7 +100,7 @@ export default function PublicRoute({
         <div className={classes.root}>
 
           <Snackbar open={exitEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-            message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][exitEmailStatus - 2]}
+            message={exitEmailMessage}
             action={
               <React.Fragment>
                 <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>

@@ -11,7 +11,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import {defaultMinHeight} from './Navigation';
+import {defaultMinHeight, defaultMaxHeight} from './Navigation';
+import Divider from '@material-ui/core/Divider';
 
 import Section from './util/Section';
 import TwoColumnSection from './util/TwoColumnSection';
@@ -26,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -45%)',
+    // position: 'absolute',
+    // top: '50%',
+    // left: '50%',
+    // transform: 'translate(-50%, -45%)',
     zIndex: 2,
   },
   titleContainer: {
@@ -101,6 +102,7 @@ export default function Home(props) {
   const isMobile = windowDimension <= mobileThreshold;
 
   const navBarHeight = props.navProps.minNavHeight || defaultMinHeight;
+  const navBarMaxHeight = props.navProps.maxNavHeight || defaultMaxHeight;
   // console.log(navBarHeight);
 
   const sectionRef1 = useRef(null);
@@ -123,6 +125,7 @@ export default function Home(props) {
 
   const [welcomeEmail, setWelcomeEmail] = useState('');
   const [welcomeEmailStatus, setWelcomeEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  const [welcomeEmailMessage, setWelcomeEmailMessage] = useState('');
 
   const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
 
@@ -144,7 +147,9 @@ export default function Home(props) {
 
     const result = await saveEmailAddress(welcomeEmail);
 
-    if(result) {
+    setWelcomeEmailMessage(result.message);
+
+    if(result.success) {
       setWelcomeEmailStatus(2);
     } else {
       setWelcomeEmailStatus(3);
@@ -155,7 +160,7 @@ export default function Home(props) {
     <React.Fragment>
 
       <Snackbar open={welcomeEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-        message={['Success! You are now on our mailing list.', 'There was an error. Try again.'][welcomeEmailStatus - 2]}
+        message={welcomeEmailMessage}
         action={
           <React.Fragment>
             <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
@@ -170,87 +175,60 @@ export default function Home(props) {
         <ParallaxImage 
           backgroundImage={`url("${process.env.PUBLIC_URL}/images/coding-bgd-slow.gif")`} 
           style={{
-            height: '100%',
+            height: '100vh',
+            display:'flex',
+            alignItems:'flex-end',
+            justifyContent:'center',
           }}
-        />
-        
-        <div className={classes.centerContainer}>
-          <div className={classes.titleContainer}>
-            <Grid container direction="row" spacing={2} className={classes.gridContainer}>
-              <Grid item xs={12}>
-                <Typography variant="h3" className={classes.title}>Competitive Programming Institute</Typography>
-              </Grid>
-{/*               
-              <Grid item xs={2}/>
-              <Grid item xs={4}>
-                <Button variant="contained" color="secondary" fullWidth component={RouterLink} to='/about'>
-                  About us
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button variant="contained" color="secondary" fullWidth component={RouterLink} to='/courses'>
-                  Courses
-                </Button>
-              </Grid>
-              <Grid item xs={2}/> */}
-
-              <Grid item xs={12} style={{display:'flex', justifyContent: 'center'}}>
-                <Typography variant='h5' style={{color:'#f55', textAlign:'center'}}>
-                  Sign up for our newsletter to receive updates about new competitive programming courses, 
-                  special discounts, and free resources.
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} style={{display:'flex', marginTop:15, marginBottom:15}}>
-                
-                <form style={{width: '100%', display:'flex', alignItems:'center', maxHeight: 50}} onSubmit={handleEmailSubmit}>
-                  <input 
-                    autocomplete='email'
-                    type='email'
-                    required
-                    autofocus 
-                    placeholder='Email Address' 
-                    style={{width: '75%', height:'100%', marginRight: '5%'}}
-                    value={welcomeEmail}
-                    onChange={handleWelcomeEmailChange}
-                  />
-                  <Button 
-                    component='button' 
-                    type='submit' 
-                    variant='contained' 
-                    color={'secondary'}
-                    style={{width: '20%', height:'100%', backgroundColor: statusColors[welcomeEmailStatus]}}
-                    disabled={welcomeEmailStatus === 1 || welcomeEmailStatus === 2}
-                  >
-                    {welcomeEmailStatus === 0 ? 
-                    "Sign up" 
-                    : welcomeEmailStatus === 1 ?
-                    <CircularProgress size={25}/>
-                    : welcomeEmailStatus === 2 ?
-                    <DoneIcon/>
-                    : welcomeEmailStatus === 3 ?
-                    <ErrorIcon/>
-                    : "Sign up"
-                    }
+        >
+          
+          <div className={classes.centerContainer} style={{height: `calc(100% - ${isMobile ? navBarHeight : navBarMaxHeight}px)`}}>
+            <div className={classes.titleContainer}>
+              <Grid container direction="row" spacing={2} className={classes.gridContainer}>
+                <Grid item xs={12}>
+                  <Typography variant={isMobile ? "h5" : "h3"} className={classes.title}>Competitive Programming Institute</Typography>
+                </Grid>
+                {/*               
+                <Grid item xs={2}/>
+                <Grid item xs={4}>
+                  <Button variant="contained" color="secondary" fullWidth component={RouterLink} to='/about'>
+                    About us
                   </Button>
-                </form>
-              </Grid>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button variant="contained" color="secondary" fullWidth component={RouterLink} to='/courses'>
+                    Courses
+                  </Button>
+                </Grid>
+                <Grid item xs={2}/> */}
 
-              <Grid item xs={5}/>
-              <Grid item xs={2} className={classes.centerGrid}>
-                  <IconButton aria-label="down" className='bouncingButton' style={{color: 'white'}} onClick={scrollSectionRef2}>
-                    <ExpandMoreIcon/>
-                  </IconButton>
+                <Grid item xs={12} style={{display:'flex', justifyContent: 'center'}}>
+                  <Typography variant={isMobile ? 'h6' : 'h5'} style={{color:'#f55', textAlign:'center'}}>
+                    Do you want to land internships and jobs at Google, Amazon, Facebook and Netflix?
+                    <br/>
+                    Do you want to impress top schools like MIT, Stanford, and Harvard? 
+                    <br/>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={5}/>
+                <Grid item xs={2} className={classes.centerGrid}>
+                  <Button aria-label="down" className='bouncingButton' style={{color: 'white'}}  onClick={scrollSectionRef2}>
+                    <div >
+                      <div>Yes!</div>
+                      <ExpandMoreIcon/>
+                    </div>
+                  </Button>
+                </Grid>
+                <Grid item xs={5}/>
               </Grid>
-              <Grid item xs={5}/>
-            </Grid>
+            </div>
           </div>
-        </div>
+        </ParallaxImage>
+        
       </div>
 
       <div style={{height: '1px'}}/>
-
-      
 
       <Section 
         onVisChange={(isVisible) => setSection2Visible(isVisible)} 
@@ -308,13 +286,61 @@ export default function Home(props) {
           </Grid>
         </Grid>
 
-        <div className={classes.centerGrid}>
-          <div style={{width: '10%'}}></div>
-          <div style={{width: '10%'}}></div>
-        </div>
       </Section>
 
-      <div style={{height: '50px'}}/>     
+      <div style={{height: '25px'}}/>
+      <Divider variant='middle' />
+      <div style={{height: '25px'}}/>
+
+      <Section maxWidth='md'>
+        <Typography variant='h5' style={{color:'#f55', textAlign:'center'}}>
+          Sign up for our newsletter to receive updates about new competitive programming courses, 
+          special discounts, and free resources.
+        </Typography>
+        <br/>
+        <form style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'flex-end'}} onSubmit={handleEmailSubmit}>
+          <Grid container spacing={1} style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
+            <Grid item xs={12} md={8}>
+              <input 
+                autocomplete='email'
+                type='email'
+                required
+                autofocus 
+                placeholder='Email Address' 
+                style={{width: '100%'}}
+                value={welcomeEmail}
+                onChange={handleWelcomeEmailChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Button 
+                component="button" 
+                type='submit' 
+                variant='contained' 
+                color='secondary' 
+                style={{width:'100%', backgroundColor: statusColors[welcomeEmailStatus]}}
+                disabled={welcomeEmailStatus === 1 || welcomeEmailStatus === 2}
+              >
+                {welcomeEmailStatus === 0 ? 
+                "Sign up" 
+                : welcomeEmailStatus === 1 ?
+                <CircularProgress size={25}/>
+                : welcomeEmailStatus === 2 ?
+                <DoneIcon/>
+                : welcomeEmailStatus === 3 ?
+                <ErrorIcon/>
+                : "Sign up"
+                }
+              </Button>
+            </Grid>
+          </Grid>
+
+        </form>
+      </Section>
+
+      <div style={{height: '40px'}}/>
+      <Divider variant='middle' />
+      <div style={{height: '10px'}}/>
       
       <TwoColumnSection 
         onVisChange={(isVisible) => setSection1Visible(isVisible)} 
@@ -337,10 +363,14 @@ export default function Home(props) {
               logical reasoning skills. 
             </p>
             <p>
-              Some of the largest competitive programming contests include the 
-              <a href="https://ioinformatics.org/" target="_blank" rel="noopener noreferrer">International Olympiad in Informatics (IOI)</a>, the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USA Computing Olympiad (USACO)</a>, and the International
-              Colllegiate Programming Contest (ICPC). There are also a number of online sites which run competitive 
-              programming contests, such as Codeforces, TopCoder, and CodeChef. 
+              Some of the largest competitive programming contests include 
+              the <a href="https://ioinformatics.org/" target="_blank" rel="noopener noreferrer">International Olympiad in Informatics (IOI)</a>
+              , the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USA Computing Olympiad (USACO)</a>
+              , and the <a href="https://icpc.global/" target="_blank" rel="noopener noreferrer">International Colllegiate Programming Contest (ICPC)</a>. 
+              There are also a number of online sites which run competitive 
+              programming contests, such as <a href="https://codeforces.com" target="_blank" rel="noopener noreferrer">Codeforces</a>
+              , <a href="https://www.topcoder.com" target="_blank" rel="noopener noreferrer">TopCoder</a>,
+               and <a href="https://www.codechef.com/" target="_blank" rel="noopener noreferrer">CodeChef</a>. 
             </p>
           </React.Fragment>
         }
