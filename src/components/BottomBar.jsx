@@ -18,6 +18,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import saveEmailAddress from './backend/saveEmails';
 
@@ -58,6 +59,7 @@ export const defaultHeight = 150;
 const navLinks = [
   ['Home', '/', <HomeIcon/>], 
   ['About', '/about', <InfoIcon/>],
+  ['Contact', '/contact', <ContactSupportIcon/>]
   // ['Courses', '/courses', <LinearScaleIcon/>],
 ];
 
