@@ -57,8 +57,8 @@ export default function About(props) {
             <Typography variant="h4" className={classes.nameText}>Dev Chheda</Typography>
             <Typography variant="h6" className={classes.positionText}><i>Founder and Lead Instructor</i></Typography>
             <div style={{width: '100%', display:'flex', justifyContent:'center'}}>
-              <IconButton component="a" color='primary' href="https://www.linkedin.com/in/dev-chheda-6497bb1a7/" target="_blank" rel="noopener noreferrer">
-                <LinkedInIcon/>
+              <IconButton size={'medium'} component="a" color='primary' href="https://www.linkedin.com/in/dev-chheda-6497bb1a7/" target="_blank" rel="noopener noreferrer">
+                <LinkedInIcon style={{fontSize:30}}/>
               </IconButton>
             </div>
             

@@ -22,8 +22,8 @@ import './styles.css';
 const contactLinks = [
   ['Email:', <EmailIcon/>, 'devmchheda@gmail.com','devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
   ['Phone:', <CallIcon/>, '704-981-1789', '704-981-1789', 'tel:704-981-1789'],
-  ['Facebook:', <FacebookIcon/>, 'facebook.com/competitive.programming.dev', 
-  `facebook.com/\ncompetitive.programming.dev`, 'https://facebook.com/competitive.programming.dev'],
+  ['Facebook:', <FacebookIcon/>, 'facebook.com/competitive.programming.institute', 
+  `facebook.com/\ncompetitive.programming.institute`, 'https://facebook.com/competitive.programming.institute'],
 ];
 
 export default function Contact(props) {

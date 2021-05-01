@@ -89,7 +89,7 @@ const navLinks = [
 const extraLinks = [
   [<EmailIcon/>, 'mailto:devmchheda@gmail.com'],
   [<CallIcon/>, 'tel:704-981-1789'],
-  [<FacebookIcon/>, 'https://www.facebook.com/competitive.programming.dev']
+  [<FacebookIcon/>, 'https://www.facebook.com/competitive.programming.institute']
 ];
 
 export const defaultMinHeight = 60;
