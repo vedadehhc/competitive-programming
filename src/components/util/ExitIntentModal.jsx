@@ -22,6 +22,7 @@ const styles = theme =>  ({
   }
 });
 
+
 class ExitIntentModal extends React.Component {
   constructor(props) {
     super(props);
@@ -39,9 +40,11 @@ class ExitIntentModal extends React.Component {
         maxDisplays: 1,
         eventThrottle: 100,
         onExitIntent: () => {
-          this.setState({show: true});
-          document.body.style.overflow = 'hidden';
-          // console.log('showing');
+          if(!this.props.isMobile) {
+            this.setState({show: true});
+            document.body.style.overflow = 'hidden';
+            // console.log('showing');
+          }
         },
       });
     }

@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import {Link as RouterLink} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
+import Drawer from '@material-ui/core/Drawer';
 
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
@@ -12,6 +13,8 @@ import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@material-ui/icons/Close';
 
 import {makeStyles} from "@material-ui/core/styles";
 import {mobileThreshold} from './../App';
@@ -62,6 +65,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover':{
       backgroundColor: '#fff',
     }
+  },
+  navButtonMobile: {
+    color: '#000',
+    backgroundColor: '#fff',
+    width: '100%',
   }
 }));
 
@@ -177,6 +185,8 @@ function Navigation(props) {
     scrollFunction()
   }
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
     <React.Fragment>
       <AppBar position="fixed" elevation={navElevation} style={{
@@ -207,7 +217,7 @@ function Navigation(props) {
             </Typography>
           </div>
           <div>
-            {navLinks.map((text,index) => (
+            {isMobile || navLinks.map((text,index) => (
               <Button component={RouterLink} to={text[1]}
                 className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
                 onMouseEnter={handleHovering}
@@ -223,6 +233,31 @@ function Navigation(props) {
                 rel="noopener noreferrer"
               >{text[0]}</IconButton>
             ))}
+            {isMobile && 
+              <React.Fragment>
+                <IconButton className={classes.navButton} onClick={() => setDrawerOpen(true)}>
+                  <MenuIcon/>
+                </IconButton>
+                <Drawer anchor='top' open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                  <div style={{height: '100vh'}}>
+                    <Button
+                      onClick={() => setDrawerOpen(false)}
+                      className={ classes.navButtonMobile }
+                      style={{height: `${Math.floor(100/(navLinks.length+1))}%`, maxHeight: 100}}
+                    >
+                      <CloseIcon/>
+                    </Button>
+                    {navLinks.map((text,index) => (
+                      <Button component={RouterLink} to={text[1]}
+                        onClick={() => setDrawerOpen(false)}
+                        className={ classes.navButtonMobile }
+                        style={{height: `${Math.floor(100/(navLinks.length+1))}%`, maxHeight: 100}}
+                      >{text[0]}</Button>
+                    ))}
+                  </div>
+                </Drawer>
+              </React.Fragment>
+            }
           </div>
         </Toolbar>
       </AppBar>

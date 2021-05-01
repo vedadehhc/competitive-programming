@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core';
 import Navigation, { defaultMinHeight } from './Navigation';
 import { Route } from 'react-router-dom';
@@ -14,6 +14,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
+
+import { mobileThreshold } from './../App';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +41,24 @@ export default function PublicRoute({
   const classes = useStyles();
   const navBarHeight = (navProps && navProps.minNavHeight) || defaultMinHeight;
   const botBarHeight = (botProps && botProps.botHeight) || defaultHeight;
+
+  
+  const [windowDimension, setWindowDimension] = useState(null);
+
+  useEffect(() => {
+    setWindowDimension(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowDimension <= mobileThreshold;
 
   const [exitEmail, setExitEmail] = useState('');
   const [exitEmailStatus, setExitEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
@@ -99,7 +119,7 @@ export default function PublicRoute({
           </main>
           <BottomBar className={classes.bottomBar} {...botProps}/>
 
-          <ExitIntentModal>
+          <ExitIntentModal isMobile={isMobile}>
             <Typography variant='h4' style={{color:'black', textAlign: 'left'}}>Leaving so soon?</Typography>
             <Typography variant='h4' style={{color:'#f55', textAlign: 'left'}}>Sign up for our newsletter first.</Typography>
             <br/>
