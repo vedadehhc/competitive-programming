@@ -8,7 +8,7 @@ import ScrollToTop from './components/util/ScrollToTopOff';
 import Courses from './components/Courses';
 import Contact from './components/Contact';
 
-export const mobileThreshold = 750;
+export const mobileThreshold = 800;
 
 class App extends Component {
   

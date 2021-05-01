@@ -17,10 +17,12 @@ import Section from './util/Section';
 import { mobileThreshold } from '../App';
 import sendForm from './backend/formResponse';
 
+import './styles.css';
+
 const contactLinks = [
-  ['Email:', <EmailIcon/>, 'devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
-  ['Phone:', <CallIcon/>, '704-981-1789', 'tel:704-981-1789'],
-  ['Facebook:', <FacebookIcon/>, 'https://facebook.com/competitive.programming.dev', 'https://facebook.com/competitive.programming.dev'],
+  ['Email:', <EmailIcon/>, 'devmchheda@gmail.com','devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
+  ['Phone:', <CallIcon/>, '704-981-1789', '704-981-1789', 'tel:704-981-1789'],
+  ['Facebook:', <FacebookIcon/>, 'facebook.com/competitive.programming.dev', `facebook.com/\ncompetitive.programming.dev`, 'https://facebook.com/competitive.programming.dev'],
 ];
 
 export default function Contact(props) {
@@ -114,11 +116,14 @@ export default function Contact(props) {
         <Typography variant="h4" style={{textAlign: 'left'}}>Get in touch</Typography>
         <div style={{height:20}}/>
         {contactLinks.map((contact, i) => (
-          <div style={{display: 'flex', alignItems: 'center'}}>
-            <Button component="a" href={contact[3]} target="_blank" rel="noopener noreferrer">
+          <div className="linkWrap" style={{
+            display: 'flex', 
+            alignItems: 'center',
+          }}>
+            <Button component="a" href={contact[4]} target="_blank" rel="noopener noreferrer" style={{maxWidth: isMobile ? 36 : '', minWidth: isMobile ? 36 : ''}}>
                {contact[1]} {isMobile || (<div style={{marginLeft: 10}}>{contact[0]}</div>)}
             </Button>
-            <div style={{marginLeft:10}}><a href={contact[3]} target="_blank" rel="noopener noreferrer">{contact[2]}</a></div>
+            <div style={{marginLeft:5}} className='linkWrap'><a href={contact[4]} target="_blank" rel="noopener noreferrer">{isMobile ? contact[3] : contact[2]}</a></div>
           </div>
         ))}
       </Section>
@@ -135,7 +140,7 @@ export default function Contact(props) {
             required
             autofocus 
             placeholder='Email Address' 
-            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            style={{width: isMobile ? '100%' :'50%',}}
             value={email}
             onChange={handleEmailChange}
           />
@@ -148,7 +153,7 @@ export default function Contact(props) {
             required
             autofocus 
             placeholder='First Name' 
-            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            style={{width: isMobile ? '100%' :'50%',}}
             value={fname}
             onChange={handleFnameChange}
           />
@@ -161,7 +166,7 @@ export default function Contact(props) {
             required
             autofocus 
             placeholder='Last Name' 
-            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            style={{width: isMobile ? '100%' :'50%',}}
             value={lname}
             onChange={handleLnameChange}
           />
@@ -173,7 +178,7 @@ export default function Contact(props) {
             required
             autofocus 
             placeholder='Message' 
-            style={{width: isMobile ? '100%' :'50%', minWidth: 400, height: 200}}
+            style={{width: isMobile ? '100%' :'50%', height: 200}}
             value={message}
             onChange={handleMessageChange}
           />
