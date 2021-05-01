@@ -231,12 +231,10 @@ export default function Home(props) {
       <div style={{height: '1px'}}/>
 
       <Section 
-        onVisChange={(isVisible) => setSection2Visible(isVisible)} 
         ref={sectionRef2}
         maxWidth='md'
+        onClickDown={scrollSectionRef1}
         className={classes.sectionContainer}
-        transition={React.Fragment}
-        isVisible={section2Visible}
       >
         <div style={{display:'flex', justifyContent:'center'}}>
           <Typography variant="h5" style={{textAlign: 'center'}}>Competitive Programming Summer Day Camp (USACO Bronze/Silver)</Typography>
@@ -288,10 +286,35 @@ export default function Home(props) {
 
       </Section>
 
+      {/* <div style={{height: '25px'}}/>
+      <Divider variant='middle' />
+      <div style={{height: '25px'}}/>
+      
+      <Section maxWidth='md' style={{display: 'flex', alignItems:'center', justifyContent:'center'}}>
+        <div 
+          class="fb-page" 
+          data-href="https://www.facebook.com/competitive.programming.institute/" 
+          data-tabs="" 
+          data-width="500" 
+          data-height="" 
+          data-small-header="false" 
+          data-adapt-container-width="true" 
+          data-hide-cover="false" 
+          data-show-facepile="true"
+        >
+          <blockquote cite="https://www.facebook.com/competitive.programming.institute/" class="fb-xfbml-parse-ignore">
+            <a href="https://www.facebook.com/competitive.programming.institute/">
+              Competitive Programming Institute
+            </a>
+          </blockquote>
+        </div>
+      </Section> */}
+
       <div style={{height: '25px'}}/>
       <Divider variant='middle' />
       <div style={{height: '25px'}}/>
 
+        
       <Section maxWidth='md'>
         <Typography variant='h5' style={{color:'#f55', textAlign:'center'}}>
           Sign up for our newsletter to receive updates about new competitive programming courses, 
@@ -343,13 +366,10 @@ export default function Home(props) {
       <div style={{height: '10px'}}/>
       
       <TwoColumnSection 
-        onVisChange={(isVisible) => setSection1Visible(isVisible)} 
         ref={sectionRef1}
         maxWidth='lg'
         onClickDown={scrollSectionRef2}
         className={classes.sectionContainer}
-        transition={React.Fragment}
-        isVisible={section1Visible}
         divider
         column1={
           <React.Fragment>
