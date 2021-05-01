@@ -1,30 +1,12 @@
-import  { DynamoDB, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
-import {CognitoIdentityClient} from '@aws-sdk/client-cognito-identity';
-import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
+import  { PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { PublishCommand } from "@aws-sdk/client-sns";
 
-const REGION = "us-east-2";
-const IDENTITY_POOL_ID = 'us-east-2:b05bf792-94ce-484b-94ed-dba2e934eab2';
+import { dynamoClient, snsClient } from './awsConfig';
 
-const dynamoClient = new DynamoDB({
-  region: REGION, 
-  credentials: fromCognitoIdentityPool({
-    client: new CognitoIdentityClient({ region: REGION }),
-    identityPoolId: IDENTITY_POOL_ID,
-  }),
-});
-
-const snsClient = new SNSClient({
-  region: REGION,
-  credentials: fromCognitoIdentityPool({
-    client: new CognitoIdentityClient({ region: REGION }),
-    identityPoolId: IDENTITY_POOL_ID,
-  }),
-});
+const TABLE_NAME = 'cpi-mailing-list';
+const TOPIC_ARN = 'arn:aws:sns:us-east-2:042242103208:cpi-mailing-list-updates';
 
 async function saveEmailDynamo(emailAddress) {
-  const TABLE_NAME = 'cpi-mailing-list';
-  const TOPIC_ARN = 'arn:aws:sns:us-east-2:042242103208:cpi-mailing-list-updates';
 
   try {
     const getParams = {

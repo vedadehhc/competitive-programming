@@ -69,7 +69,12 @@ const useStyles = makeStyles((theme) => ({
   navButtonMobile: {
     color: '#fff',
     width: '100%',
-  }
+  },
+  navButtonMobileSelected: {
+    backgroundColor: '#fff',
+    color: '#000',
+    width: '100%',
+  },
 }));
 
 
@@ -249,9 +254,13 @@ function Navigation(props) {
                     {navLinks.map((text,index) => (
                       <Button component={RouterLink} to={text[1]}
                         onClick={() => setDrawerOpen(false)}
-                        className={ classes.navButtonMobile }
+                        className={ props.menu === text[1] ? classes.navButtonMobileSelected : classes.navButtonMobile }
                         style={{height: `${Math.floor(100/(navLinks.length+1))}%`, maxHeight: 100}}
-                      >{text[0]}</Button>
+                      >
+                        {text[2]}
+                        <div style={{width:20}}/>
+                        {text[0]}
+                      </Button>
                     ))}
                   </div>
                 </Drawer>

@@ -1,0 +1,207 @@
+import React, { useState, useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+
+import SendIcon from '@material-ui/icons/Send';
+import CallIcon from '@material-ui/icons/Call';
+import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import CloseIcon from '@material-ui/icons/Close';
+import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
+
+import Section from './util/Section';
+import { mobileThreshold } from '../App';
+import sendForm from './backend/formResponse';
+
+const contactLinks = [
+  ['Email:', <EmailIcon/>, 'devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
+  ['Phone:', <CallIcon/>, '704-981-1789', 'tel:704-981-1789'],
+  ['Facebook:', <FacebookIcon/>, 'https://facebook.com/competitive.programming.dev', 'https://facebook.com/competitive.programming.dev'],
+];
+
+export default function Contact(props) {
+
+  const [windowDimension, setWindowDimension] = useState(window.innerWidth);
+
+  useEffect(() => {
+    setWindowDimension(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowDimension <= mobileThreshold;
+
+  const [email, setEmail] = useState('');
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [message, setMessage] = useState('');
+
+  function handleEmailChange(event) {
+    setEmail(event.target.value);
+  }
+
+  function handleFnameChange(event) {
+    setFname(event.target.value);
+  }
+
+  function handleLnameChange(event) {
+    setLname(event.target.value);
+  }
+
+  function handleMessageChange(event) {
+    setMessage(event.target.value);
+  }
+
+  const [formStatus, setFormStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
+  const [formMessage, setFormMessage] = useState(''); 
+
+  const statusColors = ['', '#aaa', '#4caf50', '#f44336'];
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    setFormStatus(1);
+
+    const result = await sendForm(email, fname, lname, message);
+    
+    setFormMessage(result.message);
+
+    if(result.success) {
+      setFormStatus(2);
+    } else {
+      setFormStatus(3);
+    }
+  }
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setFormStatus(0);
+  }
+
+  return (
+    <React.Fragment>
+
+       <Snackbar open={formStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+        message={formMessage}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+        ContentProps={{style: {backgroundColor: statusColors[formStatus]}}}
+      />
+
+
+      <div style={{height:30}}/>
+      <Section
+        maxWidth="md"
+      >
+        <Typography variant="h4" style={{textAlign: 'left'}}>Get in touch</Typography>
+        <div style={{height:20}}/>
+        {contactLinks.map((contact, i) => (
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <Button component="a" href={contact[3]} target="_blank" rel="noopener noreferrer">
+               {contact[1]} {isMobile || (<div style={{marginLeft: 10}}>{contact[0]}</div>)}
+            </Button>
+            <div style={{marginLeft:10}}><a href={contact[3]} target="_blank" rel="noopener noreferrer">{contact[2]}</a></div>
+          </div>
+        ))}
+      </Section>
+      <div style={{height:40}}/>
+      <Section maxWidth="md">
+        <Typography variant='h6' style={{color:'#000', textAlign:'left'}}>
+          Or, contact us with this form:
+        </Typography>
+        <div style={{height:20}}/>
+        <form onSubmit={handleFormSubmit}>
+          <input
+            autocomplete='email'
+            type='email'
+            required
+            autofocus 
+            placeholder='Email Address' 
+            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            value={email}
+            onChange={handleEmailChange}
+          />
+
+          <div style={{height:10}}/>
+
+          <input
+            autocomplete='first name'
+            type='text'
+            required
+            autofocus 
+            placeholder='First Name' 
+            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            value={fname}
+            onChange={handleFnameChange}
+          />
+
+          <div style={{height:10}}/>
+
+          <input
+            autocomplete='last name'
+            type='text'
+            required
+            autofocus 
+            placeholder='Last Name' 
+            style={{width: isMobile ? '100%' :'50%', minWidth: 400}}
+            value={lname}
+            onChange={handleLnameChange}
+          />
+
+          <div style={{height:10}}/>
+
+          <textarea
+            type='text'
+            required
+            autofocus 
+            placeholder='Message' 
+            style={{width: isMobile ? '100%' :'50%', minWidth: 400, height: 200}}
+            value={message}
+            onChange={handleMessageChange}
+          />
+
+          <div style={{height:10}}/>
+
+          <Button 
+            component="button" 
+            type="submit" 
+            variant='contained' 
+            color='secondary'
+            style={{backgroundColor: statusColors[formStatus], width: isMobile ? '100%' : ''}}
+            disabled={formStatus === 1 || formStatus === 2}
+          > 
+            {formStatus === 0 ? 
+            <React.Fragment><SendIcon/> <div style={{marginLeft: 10}}>Submit</div></React.Fragment>
+            : formStatus === 1 ?
+            <CircularProgress size={25}/>
+            : formStatus === 2 ?
+            <DoneIcon/>
+            : formStatus === 3 ?
+            <ErrorIcon/>
+            : "Sign up"
+            }
+            
+          </Button>
+        </form>
+      </Section>
+    </React.Fragment>
+  );
+}

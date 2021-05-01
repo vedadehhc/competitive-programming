@@ -6,6 +6,7 @@ import About from './components/About';
 import PublicRoute from './components/PublicRoute';
 import ScrollToTop from './components/util/ScrollToTopOff';
 import Courses from './components/Courses';
+import Contact from './components/Contact';
 
 export const mobileThreshold = 750;
 
@@ -51,6 +52,12 @@ class App extends Component {
               title="Courses" 
               component={Courses} 
               backgroundColor={theme.palette.secondary.main} 
+            />
+            <PublicRoute exact
+              path="/contact"
+              menu="/contact"
+              title="Contact"
+              component={Contact}
             />
             <Route render={() => <Redirect to="/" />}/>
           </Switch>
