@@ -22,7 +22,8 @@ import './styles.css';
 const contactLinks = [
   ['Email:', <EmailIcon/>, 'devmchheda@gmail.com','devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
   ['Phone:', <CallIcon/>, '704-981-1789', '704-981-1789', 'tel:704-981-1789'],
-  ['Facebook:', <FacebookIcon/>, 'facebook.com/competitive.programming.dev', `facebook.com/\ncompetitive.programming.dev`, 'https://facebook.com/competitive.programming.dev'],
+  ['Facebook:', <FacebookIcon/>, 'facebook.com/competitive.programming.dev', 
+  `facebook.com/\ncompetitive.programming.dev`, 'https://facebook.com/competitive.programming.dev'],
 ];
 
 export default function Contact(props) {
@@ -120,10 +121,25 @@ export default function Contact(props) {
             display: 'flex', 
             alignItems: 'center',
           }}>
-            <Button component="a" href={contact[4]} target="_blank" rel="noopener noreferrer" style={{maxWidth: isMobile ? 36 : '', minWidth: isMobile ? 36 : ''}}>
+            <Button 
+              component="a" 
+              href={contact[4]} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={{maxWidth: isMobile ? 36 : '', minWidth: isMobile ? 36 : ''}}
+            >
                {contact[1]} {isMobile || (<div style={{marginLeft: 10}}>{contact[0]}</div>)}
             </Button>
-            <div style={{marginLeft:5}} className='linkWrap'><a href={contact[4]} target="_blank" rel="noopener noreferrer">{isMobile ? contact[3] : contact[2]}</a></div>
+            <div 
+              style={{marginLeft:5}} 
+              className='linkWrap'
+            >
+              <a 
+                href={contact[4]} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >{isMobile ? contact[3] : contact[2]}</a>
+            </div>
           </div>
         ))}
       </Section>

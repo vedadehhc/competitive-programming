@@ -2,6 +2,7 @@ import  { PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { PublishCommand } from "@aws-sdk/client-sns";
 
 import { dynamoClient, snsClient } from './awsConfig';
+import getUserData from './getUserData';
 
 const TABLE_NAME = 'cpi-mailing-list';
 const TOPIC_ARN = 'arn:aws:sns:us-east-2:042242103208:cpi-mailing-list-updates';
@@ -27,11 +28,21 @@ async function saveEmailDynamo(emailAddress) {
   }
 
   try {
+    
+    let userData = {};
+    try{
+      userData = await getUserData();
+    } catch (err) {
+      console.log("User data error", err);
+      userData = {};
+    }
+
     const putParams = {
       TableName: TABLE_NAME,
       Item: {
         'id': {S: emailAddress},
         'email': {S : emailAddress},
+        ...userData,
       },
     };
 

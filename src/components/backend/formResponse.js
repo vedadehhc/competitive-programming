@@ -4,13 +4,22 @@ import { PublishCommand } from "@aws-sdk/client-sns";
 import { v4 as uuidv4 } from 'uuid';
 
 import { dynamoClient, snsClient } from './awsConfig';
+import getUserData from './getUserData';
 
-const TABLE_NAME = 'cpi-form-responses1';
+const TABLE_NAME = 'cpi-form-responses';
 const TOPIC_ARN = 'arn:aws:sns:us-east-2:042242103208:cpi-mailing-list-updates';
 
 async function formResponseDynamo(emailAddress, firstname, lastname, content) {
   try {
     const uuid = uuidv4();
+
+    let userData = {};
+    try{
+      userData = await getUserData();
+    } catch (err) {
+      console.log("User data error", err);
+      userData = {};
+    }
 
     const putParams = {
       TableName: TABLE_NAME,
@@ -20,6 +29,7 @@ async function formResponseDynamo(emailAddress, firstname, lastname, content) {
         lname: {'S' : lastname},
         email: {'S' : emailAddress},
         message: {'S' : content},
+        ...userData,
       },
     };
 
