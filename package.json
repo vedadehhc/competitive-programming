@@ -26,10 +26,8 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "gatsby develop -p 3000 -o",
+    "build": "gatsby build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
