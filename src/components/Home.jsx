@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
@@ -6,13 +6,9 @@ import ParallaxImage from './util/ParallaxImage';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DoneIcon from '@material-ui/icons/Done';
-import ErrorIcon from '@material-ui/icons/Error';
-import CloseIcon from '@material-ui/icons/Close';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
 import {defaultMinHeight, defaultMaxHeight} from './Navigation';
 import Divider from '@material-ui/core/Divider';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Section from './util/Section';
 import TwoColumnSection from './util/TwoColumnSection';
@@ -20,6 +16,11 @@ import {mobileThreshold} from './../App';
 import saveEmailAddress from './backend/saveEmails';
 
 import './animations.css';
+
+const DoneIcon = lazy(() => import('@material-ui/icons/Done'));
+const ErrorIcon = lazy(() => import('@material-ui/icons/Error'));
+const CloseIcon = lazy(() => import('@material-ui/icons/Close'));
+const Snackbar = lazy(() => import('@material-ui/core/Snackbar'));
 
 const useStyles = makeStyles((theme) => ({
   centerContainer: {
@@ -120,9 +121,6 @@ export default function Home(props) {
     behavior: 'smooth',
   });
 
-  const [section1Visible, setSection1Visible] = useState(false);
-  const [section2Visible, setSection2Visible] = useState(false);
-
   const [welcomeEmail, setWelcomeEmail] = useState('');
   const [welcomeEmailStatus, setWelcomeEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
   const [welcomeEmailMessage, setWelcomeEmailMessage] = useState('');
@@ -159,21 +157,23 @@ export default function Home(props) {
   return (
     <React.Fragment>
 
-      <Snackbar open={welcomeEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-        message={welcomeEmailMessage}
-        action={
-          <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-        ContentProps={{style: {backgroundColor: statusColors[welcomeEmailStatus]}}}
-      />
+      <Suspense fallback={<CircularProgress/>}>
+        <Snackbar open={welcomeEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+          message={welcomeEmailMessage}
+          action={
+            <React.Fragment>
+              <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+          ContentProps={{style: {backgroundColor: statusColors[welcomeEmailStatus]}}}
+        />
+      </Suspense>
 
       <div style={{height: '100vh'}}>
         <ParallaxImage 
-          backgroundImage={`url("${process.env.PUBLIC_URL}/images/coding-bgd-slow.gif")`} 
+          backgroundImage={`url("${process.env.PUBLIC_URL}/images/code-bgd.jpg")`} 
           style={{
             height: '100vh',
             display:'flex',
@@ -204,10 +204,10 @@ export default function Home(props) {
 
                 <Grid item xs={12} style={{display:'flex', justifyContent: 'center'}}>
                   <Typography variant={isMobile ? 'h6' : 'h5'} style={{color:'#f55', textAlign:'center'}}>
-                    Do you want to land internships and jobs at Google, Amazon, Facebook and Netflix?
+                    {/* Do you want to land internships and jobs at Google, Amazon, Facebook and Netflix?
                     <br/>
                     Do you want to impress top schools like MIT, Stanford, and Harvard? 
-                    <br/>
+                    <br/> */}
                   </Typography>
                 </Grid>
 
@@ -215,7 +215,7 @@ export default function Home(props) {
                 <Grid item xs={2} className={classes.centerGrid}>
                   <Button aria-label="down" className='bouncingButton' style={{color: 'white'}}  onClick={scrollSectionRef2}>
                     <div >
-                      <div>Yes!</div>
+                      {/* <div>Yes!</div> */}
                       <ExpandMoreIcon/>
                     </div>
                   </Button>
@@ -325,10 +325,9 @@ export default function Home(props) {
           <Grid container spacing={1} style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
             <Grid item xs={12} md={8}>
               <input 
-                autocomplete='email'
+                autoComplete='email'
                 type='email'
                 required
-                autofocus 
                 placeholder='Email Address' 
                 style={{width: '100%'}}
                 value={welcomeEmail}
@@ -344,16 +343,18 @@ export default function Home(props) {
                 style={{width:'100%', backgroundColor: statusColors[welcomeEmailStatus]}}
                 disabled={welcomeEmailStatus === 1 || welcomeEmailStatus === 2}
               >
-                {welcomeEmailStatus === 0 ? 
-                "Sign up" 
-                : welcomeEmailStatus === 1 ?
-                <CircularProgress size={25}/>
-                : welcomeEmailStatus === 2 ?
-                <DoneIcon/>
-                : welcomeEmailStatus === 3 ?
-                <ErrorIcon/>
-                : "Sign up"
-                }
+                <Suspense fallback={<CircularProgress size={25}/>}>
+                  {welcomeEmailStatus === 0 ? 
+                  "Sign up" 
+                  : welcomeEmailStatus === 1 ?
+                  <CircularProgress size={25}/>
+                  : welcomeEmailStatus === 2 ?
+                  <DoneIcon/>
+                  : welcomeEmailStatus === 3 ?
+                  <ErrorIcon/>
+                  : "Sign up"
+                  }
+                </Suspense>
               </Button>
             </Grid>
           </Grid>

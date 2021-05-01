@@ -72,31 +72,31 @@ async function saveEmailDynamo(emailAddress) {
 }
 
 // 
-async function saveEmailAPI(emailAddress) {
-  const data = JSON.stringify({
-    id: emailAddress, 
-    email: emailAddress,
-  });
+// async function saveEmailAPI(emailAddress) {
+//   const data = JSON.stringify({
+//     id: emailAddress, 
+//     email: emailAddress,
+//   });
 
-  const options = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: data,
-  }
+//   const options = {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: data,
+//   }
 
-  try {
-    // uses api gateway. this api is now deleted, won't work. 
-    // also requires a lambda function to be set up (which connects api to dynamodb). now deleted.
-    const res = await fetch('https://9yzau83wvg.execute-api.us-east-2.amazonaws.com/items', options);
+//   try {
+//     // uses api gateway. this api is now deleted, won't work. 
+//     // also requires a lambda function to be set up (which connects api to dynamodb). now deleted.
+//     const res = await fetch('https://9yzau83wvg.execute-api.us-east-2.amazonaws.com/items', options);
 
-    console.log(res);
-    return true;
-  } catch(err) {
-    console.log(err);
-    return false;
-  }
-} 
+//     console.log(res);
+//     return true;
+//   } catch(err) {
+//     console.log(err);
+//     return false;
+//   }
+// } 
 
 export default saveEmailDynamo;

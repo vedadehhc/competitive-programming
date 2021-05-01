@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { makeStyles } from '@material-ui/core';
 import Navigation, { defaultMinHeight } from './Navigation';
 import { Route } from 'react-router-dom';
 import BottomBar, { defaultHeight } from './BottomBar';
 import Typography from '@material-ui/core/Typography';
-import ExitIntentModal from './util/ExitIntentModal';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import saveEmailAddress from './backend/saveEmails';
-import DoneIcon from '@material-ui/icons/Done';
-import ErrorIcon from '@material-ui/icons/Error';
-import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
 
 import { mobileThreshold } from './../App';
+
+const ExitIntentModal = lazy(() => import('./util/ExitIntentModal'));
+const DoneIcon = lazy(() => import('@material-ui/icons/Done'));
+const ErrorIcon = lazy(() => import('@material-ui/icons/Error'));
+const CloseIcon = lazy(() => import('@material-ui/icons/Close'));
+const Snackbar = lazy(() => import('@material-ui/core/Snackbar'));
+const IconButton = lazy(() => import('@material-ui/core/IconButton'));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,17 +100,19 @@ export default function PublicRoute({
       render={props =>
         <div className={classes.root}>
 
-          <Snackbar open={exitEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-            message={exitEmailMessage}
-            action={
-              <React.Fragment>
-                <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              </React.Fragment>
-            }
-            ContentProps={{style: {backgroundColor: statusColors[exitEmailStatus]}}}
-          />
+          <Suspense fallback={<CircularProgress/>}>  
+            <Snackbar open={exitEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+              message={exitEmailMessage}
+              action={
+                <React.Fragment>
+                  <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </React.Fragment>
+              }
+              ContentProps={{style: {backgroundColor: statusColors[exitEmailStatus]}}}
+            />
+          </Suspense>
 
           <Navigation title={title} menu={menu} {...navProps}/>
           <main className={classes.content} style={{
@@ -122,56 +125,58 @@ export default function PublicRoute({
           </main>
           <BottomBar className={classes.bottomBar} {...botProps}/>
 
-          <ExitIntentModal isMobile={isMobile}>
-            <Typography variant='h4' style={{color:'black', textAlign: 'left'}}>Leaving so soon?</Typography>
-            <Typography variant='h4' style={{color:'#f55', textAlign: 'left'}}>Sign up for our newsletter first.</Typography>
-            <br/>
-            <p style={{color:'black', fontSize: 18,}}>
-              When you sign up, you will receive updates on our newest competitive programming courses and camps, 
-              special discounts, and free resources for competitive programming. 
-            </p>
-            <p style={{color:'black', fontSize: 24,}}>
-              It's free and easy — just enter your email below.
-            </p>
-            <form style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center'}} onSubmit={handleEmailSubmit}>
-              <Grid container spacing={1} style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                <Grid item xs={12} md={8}>
-                  <input 
-                    autocomplete='email'
-                    type='email'
-                    required
-                    autofocus 
-                    placeholder='Email Address' 
-                    style={{width: '100%', height:40}}
-                    value={exitEmail}
-                    onChange={handleExitEmailChange}
-                  />
+          <Suspense fallback={<CircularProgress/>}>
+            <ExitIntentModal isMobile={isMobile}>
+              <Typography variant='h4' style={{color:'black', textAlign: 'left'}}>Leaving so soon?</Typography>
+              <Typography variant='h4' style={{color:'#f55', textAlign: 'left'}}>Sign up for our newsletter first.</Typography>
+              <br/>
+              <p style={{color:'black', fontSize: 18,}}>
+                When you sign up, you will receive updates on our newest competitive programming courses and camps, 
+                special discounts, and free resources for competitive programming. 
+              </p>
+              <p style={{color:'black', fontSize: 24,}}>
+                It's free and easy — just enter your email below.
+              </p>
+              <form style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center'}} onSubmit={handleEmailSubmit}>
+                <Grid container spacing={1} style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <Grid item xs={12} md={8}>
+                    <input 
+                      autoComplete='email'
+                      type='email'
+                      required
+                      autoFocus 
+                      placeholder='Email Address' 
+                      style={{width: '100%', height:40}}
+                      value={exitEmail}
+                      onChange={handleExitEmailChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Button 
+                      component="button" 
+                      type='submit' 
+                      variant='contained' 
+                      color='secondary' 
+                      style={{width:'100%', backgroundColor: statusColors[exitEmailStatus]}}
+                      disabled={exitEmailStatus === 1 || exitEmailStatus === 2}
+                    >
+                      {exitEmailStatus === 0 ? 
+                      "Sign up" 
+                      : exitEmailStatus === 1 ?
+                      <CircularProgress size={25}/>
+                      : exitEmailStatus === 2 ?
+                      <DoneIcon/>
+                      : exitEmailStatus === 3 ?
+                      <ErrorIcon/>
+                      : "Sign up"
+                      }
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <Button 
-                    component="button" 
-                    type='submit' 
-                    variant='contained' 
-                    color='secondary' 
-                    style={{width:'100%', backgroundColor: statusColors[exitEmailStatus]}}
-                    disabled={exitEmailStatus === 1 || exitEmailStatus === 2}
-                  >
-                    {exitEmailStatus === 0 ? 
-                    "Sign up" 
-                    : exitEmailStatus === 1 ?
-                    <CircularProgress size={25}/>
-                    : exitEmailStatus === 2 ?
-                    <DoneIcon/>
-                    : exitEmailStatus === 3 ?
-                    <ErrorIcon/>
-                    : "Sign up"
-                    }
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-          </ExitIntentModal>
-
+              </form>
+            </ExitIntentModal>
+          </Suspense>
+          
         </div>
       }
     />

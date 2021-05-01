@@ -37,7 +37,6 @@ const agent = header.join(' ');
 function matchItem(string, data) {
   var i = 0,
       j = 0,
-      html = '',
       regex,
       regexv,
       match,

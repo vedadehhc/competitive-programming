@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-
 import SendIcon from '@material-ui/icons/Send';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import CloseIcon from '@material-ui/icons/Close';
-import DoneIcon from '@material-ui/icons/Done';
-import ErrorIcon from '@material-ui/icons/Error';
-
 import Section from './util/Section';
 import { mobileThreshold } from '../App';
 import sendForm from './backend/formResponse';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import './styles.css';
+
+const Snackbar = lazy(() => import('@material-ui/core/Snackbar'));
+const IconButton = lazy(() => import('@material-ui/core/IconButton'));
+const CloseIcon = lazy(() => import('@material-ui/icons/Close'));
+const DoneIcon = lazy(() => import('@material-ui/icons/Done'));
+const ErrorIcon = lazy(() => import('@material-ui/icons/Error'));
+
 
 const contactLinks = [
   ['Email:', <EmailIcon/>, 'devmchheda@gmail.com','devmchheda@gmail.com', 'mailto:devmchheda@gmail.com'],
@@ -28,7 +28,7 @@ const contactLinks = [
 
 export default function Contact(props) {
 
-  const [windowDimension, setWindowDimension] = useState(window.innerWidth);
+  const [windowDimension, setWindowDimension] = useState(1000);
 
   useEffect(() => {
     setWindowDimension(window.innerWidth);
@@ -96,18 +96,20 @@ export default function Contact(props) {
 
   return (
     <React.Fragment>
-
-       <Snackbar open={formStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-        message={formMessage}
-        action={
-          <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-        ContentProps={{style: {backgroundColor: statusColors[formStatus]}}}
-      />
+      
+      <Suspense fallback={<CircularProgress/>}>
+        <Snackbar open={formStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+          message={formMessage}
+          action={
+            <React.Fragment>
+              <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+          ContentProps={{style: {backgroundColor: statusColors[formStatus]}}}
+        />
+      </Suspense>
 
 
       <div style={{height:30}}/>
@@ -151,10 +153,10 @@ export default function Contact(props) {
         <div style={{height:20}}/>
         <form onSubmit={handleFormSubmit}>
           <input
-            autocomplete='email'
+            autoComplete='email'
             type='email'
             required
-            autofocus 
+            autoFocus 
             placeholder='Email Address' 
             style={{width: isMobile ? '100%' :'50%',}}
             value={email}
@@ -164,10 +166,9 @@ export default function Contact(props) {
           <div style={{height:10}}/>
 
           <input
-            autocomplete='first name'
+            autoComplete='first name'
             type='text'
             required
-            autofocus 
             placeholder='First Name' 
             style={{width: isMobile ? '100%' :'50%',}}
             value={fname}
@@ -177,10 +178,9 @@ export default function Contact(props) {
           <div style={{height:10}}/>
 
           <input
-            autocomplete='last name'
+            autoComplete='last name'
             type='text'
             required
-            autofocus 
             placeholder='Last Name' 
             style={{width: isMobile ? '100%' :'50%',}}
             value={lname}
@@ -192,7 +192,6 @@ export default function Contact(props) {
           <textarea
             type='text'
             required
-            autofocus 
             placeholder='Message' 
             style={{width: isMobile ? '100%' :'50%', height: 200}}
             value={message}
@@ -209,17 +208,18 @@ export default function Contact(props) {
             style={{backgroundColor: statusColors[formStatus], width: isMobile ? '100%' : ''}}
             disabled={formStatus === 1 || formStatus === 2}
           > 
-            {formStatus === 0 ? 
-            <React.Fragment><SendIcon/> <div style={{marginLeft: 10}}>Submit</div></React.Fragment>
-            : formStatus === 1 ?
-            <CircularProgress size={25}/>
-            : formStatus === 2 ?
-            <DoneIcon/>
-            : formStatus === 3 ?
-            <ErrorIcon/>
-            : "Sign up"
-            }
-            
+            <Suspense fallback={<CircularProgress size={25}/>}>
+              {formStatus === 0 ? 
+              <React.Fragment><SendIcon/> <div style={{marginLeft: 10}}>Submit</div></React.Fragment>
+              : formStatus === 1 ?
+              <CircularProgress size={25}/>
+              : formStatus === 2 ?
+              <DoneIcon/>
+              : formStatus === 3 ?
+              <ErrorIcon/>
+              : "Sign up"
+              }
+            </Suspense>
           </Button>
         </form>
       </Section>

@@ -9,7 +9,6 @@ import Drawer from '@material-ui/core/Drawer';
 
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
-import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
@@ -98,7 +97,7 @@ export const defaultMaxHeight = 100;
 function Navigation(props) {
   const classes = useStyles();
 
-  const [windowDimension, setWindowDimension] = useState(window.innerWidth);
+  const [windowDimension, setWindowDimension] = useState(null);
 
   useEffect(() => {
     setWindowDimension(window.innerWidth);
@@ -112,6 +111,12 @@ function Navigation(props) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    window.onscroll = () => {
+      scrollFunction()
+    }
+  });
 
   const isMobile = windowDimension <= mobileThreshold;
   // console.log(isMobile);
@@ -130,7 +135,7 @@ function Navigation(props) {
   const navTransitionSpeed = props.navTransition || '0.4s';
   const navShrinkSpeed = props.navSpeed || 1;
   const navScrollMode = props.navScrollMode || navScrollModes.DEFAULT; 
-  const logoRatio = props.logoRatio || .7;
+  // const logoRatio = props.logoRatio || .7;
 
   const noGutter = props.noGutter || false;
 
@@ -187,9 +192,7 @@ function Navigation(props) {
     }
   }
 
-  window.onscroll = () => {
-    scrollFunction()
-  }
+  
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -224,14 +227,14 @@ function Navigation(props) {
           </div>
           <div>
             {isMobile || navLinks.map((text,index) => (
-              <Button component={RouterLink} to={text[1]}
+              <Button key={`navbar-navlink${index}`} component={RouterLink} to={text[1]}
                 className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
                 onMouseEnter={handleHovering}
                 onMouseLeave={handleUnhovering}
               >{text[0]}</Button>
             ))}
             {extraLinks.map((text,index) => (
-              <IconButton href={text[1]}
+              <IconButton key={`navbar-extrabutton${index}`} href={text[1]}
                 className={(props.menu === text[1] && !hovered) ? classes.navButtonSelected : classes.navButton }
                 onMouseEnter={handleHovering}
                 onMouseLeave={handleUnhovering}
@@ -254,7 +257,7 @@ function Navigation(props) {
                       <CloseIcon/>
                     </Button>
                     {navLinks.map((text,index) => (
-                      <Button component={RouterLink} to={text[1]}
+                      <Button key={`navbar-mobile-navlink${index}`} component={RouterLink} to={text[1]}
                         onClick={() => setDrawerOpen(false)}
                         className={ props.menu === text[1] ? classes.navButtonMobileSelected : classes.navButtonMobile }
                         style={{height: `${Math.floor(100/(navLinks.length+1))}%`, maxHeight: 100}}

@@ -1,26 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {Link as RouterLink} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
-import DoneIcon from '@material-ui/icons/Done';
-import ErrorIcon from '@material-ui/icons/Error';
-import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-
-import {mobileThreshold} from './../App';
 
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
-import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import CallIcon from '@material-ui/icons/Call';
 import EmailIcon from '@material-ui/icons/Email';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import FacebookIcon from '@material-ui/icons/Facebook';
+
 import saveEmailAddress from './backend/saveEmails';
+
+const DoneIcon = lazy(() => import('@material-ui/icons/Done'));
+const ErrorIcon = lazy(() => import('@material-ui/icons/Error'));
+const CloseIcon = lazy(() => import('@material-ui/icons/Close'));
+const Snackbar = lazy(() => import('@material-ui/core/Snackbar'));
+const IconButton = lazy(() => import('@material-ui/core/IconButton'));
 
 const useStyles = makeStyles((theme) => ({
   bottomBar: {
@@ -72,23 +71,6 @@ const extraLinks = [
 export default function BottomBar(props) {
   const classes = useStyles();
 
-  const [windowDimension, setWindowDimension] = useState(null);
-
-  useEffect(() => {
-    setWindowDimension(window.innerWidth);
-  }, []);
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimension(window.innerWidth);
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const isMobile = windowDimension <= mobileThreshold;
-
   const [botEmail, setBotEmail] = useState('');
   const [botEmailStatus, setBotEmailStatus] = useState(0); // 0 = not submitted, 1 = loading, 2 = success, 3 = error
   const [botEmailMessage, setBotEmailMessage] = useState('');
@@ -125,17 +107,19 @@ export default function BottomBar(props) {
   return (
     <div className={classes.bottomBar} style={{minHeight: props.botHeight || defaultHeight}}>
 
-      <Snackbar open={botEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
-        message={botEmailMessage}
-        action={
-          <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-        ContentProps={{style: {backgroundColor: statusColors[botEmailStatus]}}}
-      />
+      <Suspense fallback={<CircularProgress/>}>
+        <Snackbar open={botEmailStatus >= 2} autoHideDuration={5000} onClose={handleClose}
+          message={botEmailMessage}
+          action={
+            <React.Fragment>
+              <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+          ContentProps={{style: {backgroundColor: statusColors[botEmailStatus]}}}
+        />
+      </Suspense>
 
       <div className={classes.leftDiv}>
         <Typography variant='h6' style={{color:'white', width:'100%'}}>
@@ -144,8 +128,9 @@ export default function BottomBar(props) {
 
         
         {navLinks.map((text,index) => (
-          <div style={{width:'100%'}}>
+          <div key={`navlinkdiv${index}`} style={{width:'100%'}}>
             <RouterLink 
+              key={`navlink${index}`}
               className={classes.link} 
               to={text[1]}
             >{text[0]}</RouterLink>
@@ -158,12 +143,15 @@ export default function BottomBar(props) {
 
         <div style={{marginTop: 'auto'}}>
           {extraLinks.map((text,index) => (
-            <IconButton 
-              href={text[1]}
-              className={classes.link}
-              target="_blank" 
-              rel="noopener noreferrer"
-            >{text[0]}</IconButton>
+            <Suspense key={`extrasuspense${index}`} fallback={<CircularProgress size={20}/>}>
+              <IconButton 
+                href={text[1]}
+                key={`extrabutton${index}`}
+                className={classes.link}
+                target="_blank" 
+                rel="noopener noreferrer"
+              >{text[0]}</IconButton>
+            </Suspense>
           ))}
         </div>
 
@@ -179,10 +167,9 @@ export default function BottomBar(props) {
           <Grid container spacing={1} style={{width: '100%', display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
             <Grid item xs={12} md={8}>
               <input 
-                autocomplete='email'
+                autoComplete='email'
                 type='email'
                 required
-                autofocus 
                 placeholder='Email Address' 
                 style={{width: '100%'}}
                 value={botEmail}
@@ -198,16 +185,18 @@ export default function BottomBar(props) {
                 style={{width:'100%', backgroundColor: statusColors[botEmailStatus]}}
                 disabled={botEmailStatus === 1 || botEmailStatus === 2}
               >
-                {botEmailStatus === 0 ? 
-                "Sign up" 
-                : botEmailStatus === 1 ?
-                <CircularProgress size={25}/>
-                : botEmailStatus === 2 ?
-                <DoneIcon/>
-                : botEmailStatus === 3 ?
-                <ErrorIcon/>
-                : "Sign up"
-                }
+                <Suspense fallback={<CircularProgress size={25}/>}>
+                  {botEmailStatus === 0 ? 
+                  "Sign up" 
+                  : botEmailStatus === 1 ?
+                  <CircularProgress size={25}/>
+                  : botEmailStatus === 2 ?
+                  <DoneIcon/>
+                  : botEmailStatus === 3 ?
+                  <ErrorIcon/>
+                  : "Sign up"
+                  }
+                </Suspense>
               </Button>
             </Grid>
           </Grid>
