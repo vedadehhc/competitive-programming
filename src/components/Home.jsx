@@ -286,30 +286,6 @@ export default function Home(props) {
 
       </Section>
 
-      {/* <div style={{height: '25px'}}/>
-      <Divider variant='middle' />
-      <div style={{height: '25px'}}/>
-      
-      <Section maxWidth='md' style={{display: 'flex', alignItems:'center', justifyContent:'center'}}>
-        <div 
-          class="fb-page" 
-          data-href="https://www.facebook.com/competitive.programming.institute/" 
-          data-tabs="" 
-          data-width="500" 
-          data-height="" 
-          data-small-header="false" 
-          data-adapt-container-width="true" 
-          data-hide-cover="false" 
-          data-show-facepile="true"
-        >
-          <blockquote cite="https://www.facebook.com/competitive.programming.institute/" class="fb-xfbml-parse-ignore">
-            <a href="https://www.facebook.com/competitive.programming.institute/">
-              Competitive Programming Institute
-            </a>
-          </blockquote>
-        </div>
-      </Section> */}
-
       <div style={{height: '25px'}}/>
       <Divider variant='middle' />
       <div style={{height: '25px'}}/>
@@ -421,8 +397,34 @@ export default function Home(props) {
           </React.Fragment>
         }
       />
+      
 
-      <div style={{height:100}}/>
+      <div style={{height: '25px'}}/>
+      <Divider variant='middle' />
+      <div style={{height: '25px'}}/>
+      
+      <Section maxWidth='lg' style={{display: 'flex', alignItems:'center', justifyContent:'center'}}>
+        <div 
+          class="fb-page" 
+          data-href="https://www.facebook.com/competitive.programming.institute/" 
+          data-tabs="timeline,messages" 
+          data-width={isMobile ? windowDimension - 80 : "500"}
+          data-height="" 
+          data-small-header="false" 
+          data-adapt-container-width= "false"
+          data-hide-cover="false" 
+          data-show-facepile="true"
+          data-lazy="false"
+        >
+          <blockquote cite="https://www.facebook.com/competitive.programming.institute/" class="fb-xfbml-parse-ignore">
+            <a href="https://www.facebook.com/competitive.programming.institute/">
+              Competitive Programming Institute
+            </a>
+          </blockquote>
+        </div>
+      </Section>
+
+      <div style={{height:25}}/>
     </React.Fragment>
   );
 }
