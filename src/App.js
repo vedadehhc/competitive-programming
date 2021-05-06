@@ -1,6 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import PublicRoute from './components/PublicRoute';
 import ScrollToTop from './components/util/ScrollToTopOff';
 import CircularProgress from '@material-ui/core/CircularProgress';
