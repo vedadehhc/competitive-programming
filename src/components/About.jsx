@@ -75,9 +75,8 @@ export default function About(props) {
               middle and high school students. He has assisted Dr. Harold 
               Reiter of UNCC with teaching a college-level Calculus course 
               and multiple competitive math courses for AMC 10/12; Dev has 
-              also assisted with coaching the NC State MATHCOUNTS team. Dev 
-              has been admitted to both MIT and Stanford to study Computer 
-              Science. 
+              also assisted with coaching the NC State MATHCOUNTS team. Dev is
+              attending MIT and plans to study Computer Science.
             </p>
           </CardContent>
         </Card>

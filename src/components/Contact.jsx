@@ -96,7 +96,7 @@ export default function Contact(props) {
 
   return (
     <React.Fragment>
-      
+
       <Suspense fallback={<CircularProgress/>}>
         <Snackbar open={formStatus >= 2} autoHideDuration={5000} onClose={handleClose}
           message={formMessage}
@@ -119,7 +119,7 @@ export default function Contact(props) {
         <Typography variant="h4" style={{textAlign: 'left'}}>Get in touch</Typography>
         <div style={{height:20}}/>
         {contactLinks.map((contact, i) => (
-          <div className="linkWrap" style={{
+          <div className="linkWrap" key={`contactlink${i}`} style={{
             display: 'flex', 
             alignItems: 'center',
           }}>

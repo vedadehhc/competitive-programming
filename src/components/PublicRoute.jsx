@@ -10,6 +10,7 @@ import saveEmailAddress from './backend/saveEmails';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { mobileThreshold } from './../App';
+import CustomerChat from './util/fbChat/CustomerChat';
 
 const ExitIntentModal = lazy(() => import('./util/ExitIntentModal'));
 const DoneIcon = lazy(() => import('@material-ui/icons/Done'));
@@ -113,6 +114,8 @@ export default function PublicRoute({
               ContentProps={{style: {backgroundColor: statusColors[exitEmailStatus]}}}
             />
           </Suspense>
+
+          <CustomerChat/>
 
           <Navigation title={title} menu={menu} {...navProps}/>
           <main className={classes.content} style={{
