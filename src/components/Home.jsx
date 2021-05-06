@@ -241,7 +241,7 @@ export default function Home(props) {
         </div>
         <br/>
         <p>
-          This course aims to prepare motivated students for competing in the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USACO</a> Bronze and Silver division contests. Experience in competitive programming helps students with applying to colleges, attaining research and corporate internships, and acing technical coding interviews.
+          This summer camp aims to prepare motivated students for competing in the <a href="http://usaco.org" target="_blank" rel="noopener noreferrer">USACO</a> Bronze and Silver division contests. Experience in competitive programming helps students with applying to colleges, attaining research and corporate internships, and acing technical coding interviews.
         </p>
         <p>
           This course trains students in algorithmic thinking, and helps develop core problem-solving skills. Topics covered include computational complexity, brute force algorithms, sorting, searching, array manipulation, greedy algorithms, and introductory graph theory. 
