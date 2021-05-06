@@ -1,0 +1,2 @@
+(this["webpackJsonpcompetitive-programming"]=this["webpackJsonpcompetitive-programming"]||[]).push([[1],{264:function(e,t,a){"use strict";var i=a(40),o=a(41);Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var p=o(a(1)),r=(0,i(a(42)).default)(p.createElement("path",{d:"M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"}),"Done");t.default=r}}]);
+//# sourceMappingURL=1.5e810edc.chunk.js.map
